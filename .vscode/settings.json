@@ -14,5 +14,8 @@
    },
    "files.autoSave": "afterDelay",
    "workbench.colorTheme": "Default Light+",
-   "editor.defaultFormatter": "HookyQR.beautify"
+   "editor.defaultFormatter": "HookyQR.beautify",
+   "[handlebars]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+   }
 }

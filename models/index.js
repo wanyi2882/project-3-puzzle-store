@@ -2,10 +2,10 @@ const bookshelf = require('../bookshelf')
 
 const Puzzle = bookshelf.model('Puzzle', {
     tableName: 'puzzles',
-    theme() {
+    Theme() {
         return this.belongsTo('Theme')
     },
-    size() {
+    Size() {
         return this.belongsTo('Size')
     },
     AgeGroup() {

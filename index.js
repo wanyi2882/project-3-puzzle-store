@@ -24,11 +24,15 @@ app.use(
 );
 
 // Import in routes
+const cloudinaryRoutes = require('./routes/cloudinary.js')
 const landingRoutes = require('./routes/landing');
+const listingsRoutes = require('./routes/listings');
 
 async function main() {
     // Use Landing Routes
     app.use('/', landingRoutes);
+    app.use('/listings', listingsRoutes);
+    app.use('/cloudinary', cloudinaryRoutes);
 }
 
 main();
