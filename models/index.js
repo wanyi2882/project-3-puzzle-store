@@ -1,7 +1,7 @@
 const bookshelf = require('../bookshelf')
 
 const Puzzle = bookshelf.model('Puzzle', {
-    tableName:'puzzles',
+    tableName: 'puzzles',
     theme() {
         return this.belongsTo('Theme')
     },
@@ -10,7 +10,14 @@ const Puzzle = bookshelf.model('Puzzle', {
     },
     AgeGroup() {
         return this.belongsTo('AgeGroup')
+    },
+    DifficultyLevel() {
+        return this.belongsTo('DifficultyLevel')
+    },
+    Material() {
+        return this.belongsTo('Material')
     }
+
 });
 
 const Theme = bookshelf.model('Theme', {
@@ -24,14 +31,28 @@ const Size = bookshelf.model('Size', {
     tableName: 'sizes',
     Puzzles() {
         return this.hasMany('Puzzle')
-    }   
+    }
 })
 
 const AgeGroup = bookshelf.model('AgeGroup', {
     tableName: 'age_groups',
     Puzzles() {
         return this.hasMany('Puzzle')
-    } 
+    }
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup };
+const DifficultyLevel = bookshelf.model('DifficultyLevel', {
+    tableName: 'difficulty_levels',
+    Puzzles() {
+        return this.hasMany('Puzzle')
+    }
+})
+
+const Material = bookshelf.model('Material', {
+    tableName: 'materials',
+    Puzzles() {
+        return this.hasMany('Puzzle')
+    }
+})
+
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material };
