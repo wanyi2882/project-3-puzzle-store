@@ -153,7 +153,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
         }),
         'image_url':fields.string({
             cssClasses: {
-                label: ['form-label mx-3 fw-bold']
+                label: ['form-label']
             },
             widget: widgets.hidden()
         })                        
