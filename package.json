@@ -1,0 +1,25 @@
+{
+  "name": "project-3-puzzle-store-express",
+  "version": "1.0.0",
+  "description": "![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanyi2882/project-3-puzzle-store-express.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wanyi2882/project-3-puzzle-store-express/issues"
+  },
+  "homepage": "https://github.com/wanyi2882/project-3-puzzle-store-express#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "hbs": "^4.2.0",
+    "wax-on": "^1.2.2"
+  }
+}
