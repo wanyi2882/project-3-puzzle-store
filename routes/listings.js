@@ -199,4 +199,34 @@ router.post('/:listing_id/update', async (req, res) => {
     })
 })
 
-module.exports = router;
+// Delete a listing
+router.get('/:listing_id/delete', async (req, res) => {
+
+    // Fetch the data to delete
+    const listing = await Puzzle.where({
+        id: req.params.listing_id
+    }).fetch({
+        require: true
+    })
+
+    res.render('listings/delete', {
+        'listing': listing.toJSON()
+    })
+})
+
+// Process delete listing
+router.post('/:listing_id/delete', async(req, res) => {
+
+    // Fetch data to delete
+    const listing = await Puzzle.where({
+        id: req.params.listing_id
+    }).fetch({
+        require: true
+    })
+
+    await listing.destroy()
+    res.redirect('/listings')
+
+})
+
+    module.exports = router;
