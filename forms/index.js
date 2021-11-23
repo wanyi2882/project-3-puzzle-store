@@ -44,7 +44,8 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer()]
         }),
         'description': fields.string({
             required: true,
@@ -58,7 +59,8 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer()]
         }),        
         'length': fields.string({
             label: 'Length (in cm)',
@@ -66,7 +68,8 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer()]
         }),        
         'breadth': fields.string({
             label: 'Breadth (in cm)',
@@ -74,7 +77,8 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators:[validators.integer()]
         }),        
         'brand': fields.string({
             required: true,
@@ -151,7 +155,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             widget: widgets.multipleSelect(),
             choices: frames
         }),
-        'image_url':fields.string({
+        'image':fields.string({
             cssClasses: {
                 label: ['form-label']
             },
