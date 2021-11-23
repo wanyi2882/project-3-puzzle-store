@@ -164,4 +164,60 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
     })
 };
 
-module.exports = { createPuzzleForm, bootstrapField };
+// Create Admin registration form
+const createAdminRegistrationForm = () => {
+    return forms.create({
+        'username': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'email': fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
+        'confirm_password': fields.password({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.matchField('password')]
+        })
+    })
+}
+
+// Create Admin login form
+const createAdminLoginForm = () => {
+    return forms.create({
+        'email': fields.string({
+            'required': true,
+            'errorAfterField': true,
+            'cssClasses': {
+                'label': ['form-label']
+            }
+        }),
+        'password': fields.string({
+            'required': true,
+            'errorAfterField': true,
+            'cssClasses': {
+                'label': ['form-label']
+            },
+            'widget': widgets.password()
+        })
+    })
+}
+
+module.exports = { createPuzzleForm, bootstrapField, createAdminRegistrationForm, createAdminLoginForm };

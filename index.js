@@ -50,12 +50,14 @@ app.use(function (req, res, next) {
 const cloudinaryRoutes = require('./routes/cloudinary.js')
 const landingRoutes = require('./routes/landing');
 const listingsRoutes = require('./routes/listings');
+const adminRoutes = require('./routes/admin_user');
 
 async function main() {
     // Use Landing Routes
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
+    app.use('/admin', adminRoutes)
 }
 
 main();

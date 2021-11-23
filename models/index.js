@@ -73,4 +73,8 @@ const Frame = bookshelf.model('Frame', {
         return this.belongsToMany('Puzzle')
     }
 })
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame };
+
+const AdminUser = bookshelf.model('AdminUser',{
+    tableName: 'admin_users'
+})
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, AdminUser };
