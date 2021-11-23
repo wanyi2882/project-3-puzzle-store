@@ -15,19 +15,19 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-  return db.createTable('puzzles_frames', {
+  return db.createTable('frames_puzzles', {
     id: {
       type: 'int',
       primaryKey: true,
       autoIncrement: true
     },
-    puzzle_id: {
+    frame_id: {
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'puzzles_frames_puzzle_fk',
-        table: 'puzzles',
+        name: 'frames_puzzles_frame_fk',
+        table: 'frames',
         rules: {
           onDelete: 'cascade',
           onUpdate: 'restrict'
@@ -35,13 +35,13 @@ exports.up = function (db) {
         mapping: 'id'
       }
     },
-    frame_id: {
+    puzzle_id: {
       type: 'int',
       unsigned: true,
       notNull: true,
       foreignKey: {
-        name: 'puzzles_frames_frame_fk',
-        table: 'frames',
+        name: 'frames_puzzles_puzzle_fk',
+        table: 'puzzles',
         rules: {
           onDelete: 'cascade',
           onUpdate: 'restrict'
@@ -53,7 +53,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-  return db.dropTable('puzzles_frames');
+  return db.dropTable('frames_puzzles');
 };
 
 exports._meta = {
