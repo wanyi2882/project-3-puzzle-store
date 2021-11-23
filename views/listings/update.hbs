@@ -9,25 +9,28 @@
         {{#if listing.image}}
         <img src="{{listing.image}}" id="uploaded_image" style="max-width: 50%; height: auto;" />
         {{else}}
-        <img src="/preview-image.jpeg" id="uploaded_image" />
+        <img src="https://res.cloudinary.com/dysalukfe/image/upload/v1637687884/preview-image_qv8uyp.jpg" 
+        alt="preview image"
+        style="max-width: 50%; height: auto;" 
+        id="uploaded_image" />
         {{/if}}
     </div>
     <div>
-        <a href="#" class="btn btn-primary" id="upload_widget">Upload</a>
+        <a href="#" class="btn btn-primary" id="upload_widget">Update Image</a>
     </div>
     <input type="submit" value="Update Product" class="btn btn-primary" />
 </form>
 {{/block}}
 
 {{#block 'js'}}
-{{!-- initialise cloudinary --}}
+<!-- initialise cloudinary -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
     integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
     crossorigin="anonymous"></script>
 
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
-{{!-- get signature --}}
+<!-- get signature -->
 <script>
     function generateSignature(callback, params_to_sign) {
         axios.get('/cloudinary/sign', {

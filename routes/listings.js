@@ -70,6 +70,9 @@ router.post('/create', async (req, res) => {
                 await puzzle.Frame().attach(frames.split(","));
             }
 
+            // Success Flash Message
+            req.flash("success_messages", `New Product ${puzzle.get('title')} has been created`)
+
             res.redirect('/listings');
         },
         'error': async (form) => {
@@ -118,6 +121,7 @@ router.get('/:listing_id/update', async (req, res) => {
     puzzleForm.fields.age_group_id.value = listing.get('age_group_id');
     puzzleForm.fields.difficulty_level_id.value = listing.get('difficulty_level_id');
     puzzleForm.fields.material_id.value = listing.get('material_id');
+    puzzleForm.fields.image.value = listing.get('image')
 
     // Fill in the multi-select for the tags
     let selectedTags = await listing.related('Tag').pluck('id');
@@ -188,6 +192,9 @@ router.post('/:listing_id/update', async (req, res) => {
             // Add in all the frames selected in the form
             await listing.Frame().attach(frameIds)
 
+            // Success Flash Message
+            req.flash("success_messages", `Puzzle ${listing.get('title')} has been updated`)
+
             res.redirect('/listings')
         },
         'error': async (form) => {
@@ -224,9 +231,11 @@ router.post('/:listing_id/delete', async(req, res) => {
         require: true
     })
 
+    // Success Flash Message
+    req.flash("success_messages", `${listing.get('title')} has been deleted`)
+
     await listing.destroy()
     res.redirect('/listings')
-
 })
 
     module.exports = router;

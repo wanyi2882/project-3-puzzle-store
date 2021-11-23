@@ -3,6 +3,11 @@ const hbs = require("hbs");
 const wax = require("wax-on");
 require("dotenv").config();
 
+// For sessions and flash messages
+const session = require('express-session');
+const flash = require('connect-flash');
+const FileStore = require('session-file-store')(session);
+
 // Create an instance of express app
 let app = express();
 
@@ -22,6 +27,24 @@ app.use(
     extended: false
   })
 );
+
+// Set up sessions
+app.use(session({
+  store: new FileStore(),
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true
+}))
+
+// Set up flash messages
+app.use(flash())
+
+// Register Flash middleware
+app.use(function (req, res, next) {
+  res.locals.success_messages = req.flash("success_messages");
+  res.locals.error_messages = req.flash("error_messages");
+  next();
+});
 
 // Import in routes
 const cloudinaryRoutes = require('./routes/cloudinary.js')
