@@ -83,13 +83,21 @@ const landingRoutes = require('./routes/landing');
 const listingsRoutes = require('./routes/listings');
 const adminRoutes = require('./routes/admin_user');
 
+// Import in API routes
+const api = {
+  'listings': require('./routes/api/listings')
+}
+
+// Register routes
 async function main() {
-    // Use Landing Routes
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/admin', adminRoutes)
 }
+
+// Register the API routes
+app.use('/api/listings', express.json(), api.listings)
 
 main();
 
