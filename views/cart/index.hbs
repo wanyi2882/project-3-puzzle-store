@@ -1,0 +1,33 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+
+<h1>My Cart</h1>
+<a href="/checkout" class="btn btn-primary btn-lg">Checkout</a>
+
+{{#each cartDetails}} 
+    <div class="card my-3">
+        <div class="card-body">
+            <h3 class="card-title">{{this.puzzle.title}}</h3> 
+            <div>
+                <form method="POST" action="/cart/{{this.puzzle.id}}/quantity/update"> 
+                    <input type="hidden" name="_csrf" value="{{../this.csrfToken}}"/>
+                    <label>  Quantity: </label>
+                    <input type="text" name="newQuantity" value="{{this.quantity}}" style="width:50px"/>
+                    <input type="submit" class="btn btn-primary btn-sm" value="Update"/>
+                </form>
+                <div>
+                    {{this.puzzle.description}}
+                </div>
+                <div>
+                    Cost: {{this.puzzle.cost}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{{/each}}
+
+{{/block}}
+
+{{/extends}}

@@ -97,6 +97,7 @@ const cloudinaryRoutes = require('./routes/cloudinary.js')
 const landingRoutes = require('./routes/landing');
 const listingsRoutes = require('./routes/listings');
 const userRoutes = require('./routes/users');
+const cartRoutes = require('./routes/cart')
 
 // Import in API routes
 const api = {
@@ -109,7 +110,8 @@ async function main() {
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
-    app.use('/users', userRoutes)
+    app.use('/users', userRoutes);
+    app.use('/cart', cartRoutes);
 }
 
 // Register the API routes

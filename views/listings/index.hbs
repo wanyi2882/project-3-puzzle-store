@@ -7,6 +7,7 @@
             <th>ID</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>Add to Cart</th>
             <th>Title</th>
             <th>Cost(Cents)</th>
             <th>Stock</th>
@@ -30,6 +31,9 @@
             </td>
             <td>
                 <a href="/listings/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+            <td>
+                <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to Cart</a>
             </td>
             <td>
                 {{this.title}}
