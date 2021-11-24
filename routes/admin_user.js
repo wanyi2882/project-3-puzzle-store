@@ -23,7 +23,7 @@ router.get('/register', (req, res) => {
     const adminRegisterForm = createAdminRegistrationForm();
 
     res.render('admin_users/register', {
-        'form': adminRegisterForm.toHTML(bootstrapField)
+        'adminRegisterForm': adminRegisterForm.toHTML(bootstrapField)
     })
 })
 
@@ -47,7 +47,7 @@ router.post('/register', (req, res) => {
         },
         'error': (form) => {
             res.render('admin_users/register', {
-                adminRegisterForm: form.toHTML(bootstrapField)
+                'adminRegisterForm': form.toHTML(bootstrapField)
             })
         }
     })
@@ -56,8 +56,63 @@ router.post('/register', (req, res) => {
 // Create Login Page
 router.get('/login', (req,res)=>{
     const adminLoginForm = createAdminLoginForm();
+
     res.render('admin_users/login',{
-        adminLoginForm: adminLoginForm.toHTML(bootstrapField)
+        'adminLoginForm': adminLoginForm.toHTML(bootstrapField)
+    })
+})
+
+// Process Login and compare password at Login
+router.post('/login', (req, res) => {
+    const adminLoginForm = createAdminLoginForm();
+
+    adminLoginForm.handle(req, {
+        'success': async(form) => {
+            // Fetch admin user by email
+            let admin_user = await AdminUser.where({
+                'email': form.data.email
+            }).fetch({
+                'require': false
+            })
+
+            // If admin user exists, check if password matches
+            if(admin_user) {
+                if(admin_user.get('password') == getHashedPassword(form.data.password)) {
+                    // Proceed to login
+                    req.session.admin_user = {
+                        'id': admin_user.get('id'),
+                        'email': admin_user.get('email'),
+                        'username': admin_user.get('username')
+                    }
+
+                    req.flash("success_messages", `Welcome back ${admin_user.get('username')} !`)
+
+                    res.redirect('/admin/profile');
+                }
+                else {
+                    // Login has failed when password mis match
+                    req.flash('error_messages', 'Login failed')
+                    res.redirect('/admin/login')
+                }
+            }
+            else {
+                // Login has failed when user does not exist
+                req.flash('error_messages', 'Login failed')
+                res.redirect('/admin/login')
+            }
+        },
+        'error': (form) => {
+            res.render('admin_users/login', {
+                'adminLoginForm': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+// Display Profile page
+router.get('/profile', (req, res) => {
+    res.render('admin_users/profile', {
+        admin_user: req.session.admin_user
     })
 })
 
