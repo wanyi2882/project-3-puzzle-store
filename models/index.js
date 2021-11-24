@@ -74,12 +74,8 @@ const Frame = bookshelf.model('Frame', {
     }
 })
 
-const AdminUser = bookshelf.model('AdminUser',{
-    tableName: 'admin_users'
-})
-
 const User = bookshelf.model('User',{
     tableName: 'users'
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, AdminUser, User };
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User };

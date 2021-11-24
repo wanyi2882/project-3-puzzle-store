@@ -44,20 +44,26 @@ app.use(session({
 }))
 
 // Enable CSRF
-app.use(csrf());
+// app.use(csrf());
 
-app.use(function (err, req, res, next) {
-  if (err && err.code == "EBADCSRFTOKEN") {
-      req.flash('error_messages', 'The form has expired. Please try again');
-      res.redirect('back');
+const csrfInstance = csrf();
+app.use(function(req,res,next){
+  if (req.url == "/checkout/process_payment" ||
+     req.url.slice(0,5) == '/api/' ) {
+    // For above url don't perform csrf checks
+    next();
   } else {
-      next()
+    // If it is any other routes, then perform csrf check
+    csrfInstance(req,res,next);
   }
-});
+})
 
+// Global middleware 
 // Share CSRF with hbs files
 app.use(function(req,res,next){
-  res.locals.csrfToken = req.csrfToken();
+  if (req.csrfToken) {
+    res.locals.csrfToken = req.csrfToken();
+  }
   next();
 })
 
@@ -71,9 +77,18 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Share the admin user data with hbs files
+app.use(function (err, req, res, next) {
+  if (err && err.code == "EBADCSRFTOKEN") {
+      req.flash('error_messages', 'The form has expired. Please try again');
+      res.redirect('back');
+  } else {
+      next()
+  }
+});
+
+// Share the user data with hbs files
 app.use(function(req,res,next){
-  res.locals.admin_user = req.session.admin_user;
+  res.locals.user = req.session.user;
   next();
 })
 
@@ -81,11 +96,12 @@ app.use(function(req,res,next){
 const cloudinaryRoutes = require('./routes/cloudinary.js')
 const landingRoutes = require('./routes/landing');
 const listingsRoutes = require('./routes/listings');
-const adminRoutes = require('./routes/admin_user');
+const userRoutes = require('./routes/users');
 
 // Import in API routes
 const api = {
-  'listings': require('./routes/api/listings')
+  'listings': require('./routes/api/listings'),
+  'users': require('./routes/api/users')
 }
 
 // Register routes
@@ -93,11 +109,12 @@ async function main() {
     app.use('/', landingRoutes);
     app.use('/listings', listingsRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
-    app.use('/admin', adminRoutes)
+    app.use('/users', userRoutes)
 }
 
 // Register the API routes
 app.use('/api/listings', express.json(), api.listings)
+app.use('/api/users', express.json(), api.users)
 
 main();
 

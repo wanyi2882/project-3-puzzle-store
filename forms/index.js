@@ -164,8 +164,8 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
     })
 };
 
-// Create Admin registration form
-const createAdminRegistrationForm = () => {
+// Create registration form
+const createRegistrationForm = () => {
     return forms.create({
         'username': fields.string({
             required: true,
@@ -199,8 +199,8 @@ const createAdminRegistrationForm = () => {
     })
 }
 
-// Create Admin login form
-const createAdminLoginForm = () => {
+// Create login form
+const createLoginForm = () => {
     return forms.create({
         'email': fields.string({
             'required': true,
@@ -220,4 +220,4 @@ const createAdminLoginForm = () => {
     })
 }
 
-module.exports = { createPuzzleForm, bootstrapField, createAdminRegistrationForm, createAdminLoginForm };
+module.exports = { createPuzzleForm, bootstrapField, createRegistrationForm, createLoginForm };

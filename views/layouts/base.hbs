@@ -38,12 +38,12 @@
           </li>
         </ul>
         <div>
-        {{#if admin_user}}
-          Hi, {{admin_user.username}}
-          <a href="/admin/logout" class="ml-3 btn btn-primary btn-sm">Logout</a>
+        {{#if user}}
+          Hi, {{user.username}}
+          <a href="/users/logout" class="ml-3 btn btn-primary btn-sm">Logout</a>
         {{else}}
           Hi, stranger
-          <a href="/admin/login" class="ml-3 btn btn-primary btn-sm">Login</a>
+          <a href="/users/login" class="ml-3 btn btn-primary btn-sm">Login</a>
         {{/if}}
         </div>
       </div>
