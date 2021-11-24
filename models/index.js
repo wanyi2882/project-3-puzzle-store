@@ -78,4 +78,11 @@ const User = bookshelf.model('User',{
     tableName: 'users'
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User };
+const CartDetail = bookshelf.model('CartDetail', {
+    tableName: 'cart_details',
+    puzzle() {
+        return this.belongsTo('Puzzle')
+    }    
+})
+
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail };
