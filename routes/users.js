@@ -46,7 +46,7 @@ router.post('/register', (req, res) => {
 
             await user.save()
             req.flash('success_messages', "User Successfully created.")
-            res.redirect("/login")
+            res.redirect("/users/login")
         },
         'error': (form) => {
             res.render('users/register', {
@@ -80,7 +80,7 @@ router.post('/login', (req, res) => {
 
             // If user exists, check if password matches
             if(user) {
-                if(user.get('password') == getHashedPassword(form.data.password)) {
+                if((user.get('password') == getHashedPassword(form.data.password)) && (user.get('role_type') == 'admin')) {
                     // Proceed to login
                     req.session.user = {
                         'id': user.get('id'),
