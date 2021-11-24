@@ -18,12 +18,14 @@ exports.up = function(db) {
   return db.createTable('users', {
     id: {
       type: 'int',
+      unsigned: true,
       primaryKey: true,
       autoIncrement: true
     },
     username: {type:'string', length: 100},
     email: {type:'string', length: 320},
-    password: {type:'string', length: 80}
+    password: {type:'string', length: 80}, 
+    role_type: {type: 'string', length: 45}
   });
 };
 
