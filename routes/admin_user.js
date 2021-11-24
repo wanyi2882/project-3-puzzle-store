@@ -7,6 +7,9 @@ const { AdminUser } = require('../models');
 // Import in forms
 const { createAdminRegistrationForm, bootstrapField, createAdminLoginForm } = require('../forms');
 
+// Import Middleware
+const { checkIfAuthenticated } = require('../middlewares');
+
 // Create Hash Password
 const crypto = require('crypto');
 
@@ -110,11 +113,19 @@ router.post('/login', (req, res) => {
 })
 
 // Display Profile page
-router.get('/profile', (req, res) => {
+router.get('/profile', [checkIfAuthenticated], (req, res) => {
     res.render('admin_users/profile', {
         admin_user: req.session.admin_user
     })
 })
+
+// Logout of admin user
+router.get('/logout', [checkIfAuthenticated], (req,res)=>{
+    req.session.admin_user = null;
+    req.flash('success_messages', "Logged out successfully");
+    res.redirect('/admin/login');
+    });
+    
 
 
 

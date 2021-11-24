@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+// Import Middleware
+const { checkIfAuthenticated } = require('../middlewares');
+
 // Import in the Puzzle model
 const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
 
@@ -10,7 +13,7 @@ const { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, ge
 // Import in the Forms
 const { bootstrapField, createPuzzleForm } = require('../forms');
 
-router.get('/', async (req, res) => {
+router.get('/', [checkIfAuthenticated], async (req, res) => {
     // Fetch all the puzzles (ie, SELECT * from products)
     let puzzles = await Puzzle.collection().fetch({
         withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
@@ -21,7 +24,7 @@ router.get('/', async (req, res) => {
 })
 
 // Displaying Create Form
-router.get('/create', async (req, res) => {
+router.get('/create', [checkIfAuthenticated], async (req, res) => {
     const themes = await getThemes()
     const sizes = await getSizes()
     const age_groups = await getAgeGroups()
@@ -41,7 +44,7 @@ router.get('/create', async (req, res) => {
 })
 
 // Process Submitted form
-router.post('/create', async (req, res) => {
+router.post('/create', [checkIfAuthenticated], async (req, res) => {
     const themes = await getThemes()
     const sizes = await getSizes()
     const age_groups = await getAgeGroups()
@@ -87,7 +90,7 @@ router.post('/create', async (req, res) => {
 })
 
 // Get update form
-router.get('/:listing_id/update', async (req, res) => {
+router.get('/:listing_id/update', [checkIfAuthenticated], async (req, res) => {
 
     // Fetch the data to update
     const listing = await Puzzle.where({
@@ -141,7 +144,7 @@ router.get('/:listing_id/update', async (req, res) => {
 })
 
 // Process update form
-router.post('/:listing_id/update', async (req, res) => {
+router.post('/:listing_id/update', [checkIfAuthenticated], async (req, res) => {
 
     // Fetch the data to update
     const listing = await Puzzle.where({
@@ -207,7 +210,7 @@ router.post('/:listing_id/update', async (req, res) => {
 })
 
 // Delete a listing
-router.get('/:listing_id/delete', async (req, res) => {
+router.get('/:listing_id/delete', [checkIfAuthenticated], async (req, res) => {
 
     // Fetch the data to delete
     const listing = await Puzzle.where({
@@ -222,7 +225,7 @@ router.get('/:listing_id/delete', async (req, res) => {
 })
 
 // Process delete listing
-router.post('/:listing_id/delete', async(req, res) => {
+router.post('/:listing_id/delete', [checkIfAuthenticated], async(req, res) => {
 
     // Fetch data to delete
     const listing = await Puzzle.where({
