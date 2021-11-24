@@ -1,9 +1,14 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+
 <h1>Update Product: {{listing.title}}</h1>
+
 <form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
     {{{form}}}
+    
     <div>
         <div>Preview Image: </div>
         {{#if listing.image}}

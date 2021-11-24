@@ -1,7 +1,11 @@
 const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
+const cors = require("cors")
 require("dotenv").config();
+
+// Set up CSRF
+const csrf = require('csurf')
 
 // For sessions and flash messages
 const session = require('express-session');
@@ -13,6 +17,9 @@ let app = express();
 
 // Set up the view engine
 app.set("view engine", "hbs");
+
+// Use CORS
+app.use(cors())
 
 // Set up static folder
 app.use(express.static("public"));
@@ -36,6 +43,24 @@ app.use(session({
   saveUninitialized: true
 }))
 
+// Enable CSRF
+app.use(csrf());
+
+app.use(function (err, req, res, next) {
+  if (err && err.code == "EBADCSRFTOKEN") {
+      req.flash('error_messages', 'The form has expired. Please try again');
+      res.redirect('back');
+  } else {
+      next()
+  }
+});
+
+// Share CSRF with hbs files
+app.use(function(req,res,next){
+  res.locals.csrfToken = req.csrfToken();
+  next();
+})
+
 // Set up flash messages
 app.use(flash())
 
@@ -45,6 +70,12 @@ app.use(function (req, res, next) {
   res.locals.error_messages = req.flash("error_messages");
   next();
 });
+
+// Share the admin user data with hbs files
+app.use(function(req,res,next){
+  res.locals.admin_user = req.session.admin_user;
+  next();
+})
 
 // Import in routes
 const cloudinaryRoutes = require('./routes/cloudinary.js')

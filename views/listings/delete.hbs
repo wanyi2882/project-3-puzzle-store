@@ -1,9 +1,12 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+
 <h1>Deleting {{listing.title}}</h1>
 
 <form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
     <div class="alert alert-danger">
         <p>Are you sure you want to delete {{listing.title}}?</p>
         <input type="submit" class="btn btn-danger" value="Yes"/>
