@@ -15,6 +15,39 @@
 
 <body>
   <div class="container mx-0">
+    <!--Navigation Bar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Puzzle. Join Admin Site</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" 
+      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item active">
+            <a class="nav-link" href="/listings">Listings <span class="sr-only">(current)</span></a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+        </ul>
+        <div>
+        {{#if admin_user}}
+          Hi, {{admin_user.username}}
+          <a href="/admin/logout" class="ml-3 btn btn-primary btn-sm">Logout</a>
+        {{else}}
+          Hi, stranger
+          <a href="/admin/login" class="ml-3 btn btn-primary btn-sm">Login</a>
+        {{/if}}
+        </div>
+      </div>
+    </nav>
 
     <!--Flash Alert Messages goes before the block content-->
     {{#if success_messages}}
