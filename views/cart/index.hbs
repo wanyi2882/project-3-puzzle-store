@@ -22,7 +22,10 @@
                 <div>
                     Cost: {{this.puzzle.cost}}
                 </div>
-
+                <form method="POST" action="/cart/{{this.puzzle.id}}/remove">
+                    <input type="hidden" name="_csrf" value="{{../csrfToken}}"/>
+                    <input type="submit" class="btn btn-danger btn-sm" value="Remove from Cart"/>
+                </form>
             </div>
         </div>
     </div>
