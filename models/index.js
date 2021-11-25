@@ -85,4 +85,8 @@ const CartDetail = bookshelf.model('CartDetail', {
     }    
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail };
+const BlacklistedToken = bookshelf.model('BlacklistedToken',{
+    'tableName': 'blacklisted_tokens'
+})
+
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken };

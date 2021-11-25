@@ -51,8 +51,7 @@ app.use(function(req,res,next){
 
   console.log("Checking for csrf exclusion")
 
-  if (req.url == "/checkout/process_payment" ||
-     req.url.slice(0,5) == '/api/' ) {
+  if (req.url == "/checkout/process_payment" || req.url.slice(0,5) == "/api/" ) {
     // For above url don't perform csrf checks
     next();
   } else {
@@ -80,15 +79,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(function (err, req, res, next) {
-  if (err && err.code == "EBADCSRFTOKEN") {
-      req.flash('error_messages', 'The form has expired. Please try again');
-      res.redirect('back');
-  } else {
-      next()
-  }
-});
-
 // Share the user data with hbs files
 app.use(function(req,res,next){
   res.locals.user = req.session.user;
@@ -103,6 +93,12 @@ const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart')
 const checkoutRoutes = require('./routes/checkout')
 
+// Import API routes
+const api = {
+  'listings': require('./routes/api/listings'),
+  'users': require('./routes/api/users')
+}
+
 // Register routes
 async function main() {
     app.use('/', landingRoutes);
@@ -110,8 +106,12 @@ async function main() {
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/users', userRoutes);
     app.use('/cart', cartRoutes);
-    app.use('/checkout', checkoutRoutes)
+    app.use('/checkout', checkoutRoutes);
 }
+
+//  Register API routes
+app.use('/api/listings', express.json(), api.listings)
+app.use('/api/users', express.json(), api.users)
 
 main();
 
