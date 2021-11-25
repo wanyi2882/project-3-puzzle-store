@@ -48,6 +48,9 @@ app.use(session({
 
 const csrfInstance = csrf();
 app.use(function(req,res,next){
+
+  console.log("Checking for csrf exclusion")
+
   if (req.url == "/checkout/process_payment" ||
      req.url.slice(0,5) == '/api/' ) {
     // For above url don't perform csrf checks
@@ -98,12 +101,7 @@ const landingRoutes = require('./routes/landing');
 const listingsRoutes = require('./routes/listings');
 const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart')
-
-// Import in API routes
-const api = {
-  'listings': require('./routes/api/listings'),
-  'users': require('./routes/api/users')
-}
+const checkoutRoutes = require('./routes/checkout')
 
 // Register routes
 async function main() {
@@ -112,11 +110,8 @@ async function main() {
     app.use('/cloudinary', cloudinaryRoutes);
     app.use('/users', userRoutes);
     app.use('/cart', cartRoutes);
+    app.use('/checkout', checkoutRoutes)
 }
-
-// Register the API routes
-app.use('/api/listings', express.json(), api.listings)
-app.use('/api/users', express.json(), api.users)
 
 main();
 
