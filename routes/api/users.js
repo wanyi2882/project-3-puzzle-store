@@ -23,6 +23,18 @@ const getHashedPassword = (password) => {
 const { User, BlacklistedToken } = require('../../models')
 const { checkIfAuthenticatedJWT } = require('../../middlewares');
 
+
+// Post route for user register
+router.post('/register', async function (req, res) {
+    let user = new User({
+        'username': req.body.username,
+        'email': req.body.email,
+        'password': req.body.password
+    })
+
+    await user.save()
+})
+
 // Post route for user login 
 router.post('/login', async function (req, res) {
     let user = await User.where({
@@ -36,7 +48,8 @@ router.post('/login', async function (req, res) {
         let refreshToken = generateToken(user, process.env.REFRESH_TOKEN_SECRET, '3w')
         res.json({
             accessToken,
-            refreshToken
+            refreshToken,
+            user
         });
     } else {
         res.json({
@@ -45,10 +58,15 @@ router.post('/login', async function (req, res) {
     }
 })
 
-router.get('/profile', checkIfAuthenticatedJWT, function (req, res) {
-    res.json({
-        'user': req.user
+router.get('/profile', checkIfAuthenticatedJWT, async function (req, res) {
+
+    let user = await User.where({
+        'id': req.user.id
+    }).fetch({
+        'require': false
     })
+
+    res.send(user)
 })
 
 
