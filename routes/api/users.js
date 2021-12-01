@@ -48,8 +48,7 @@ router.post('/login', async function (req, res) {
         let refreshToken = generateToken(user, process.env.REFRESH_TOKEN_SECRET, '3w')
         res.json({
             accessToken,
-            refreshToken,
-            user
+            refreshToken
         });
     } else {
         res.json({
