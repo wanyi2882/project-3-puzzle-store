@@ -25,4 +25,19 @@ router.get('/add', [checkIfAuthenticatedJWT], async function (req, res) {
         res.send(status);
     }
 })
+
+// Process update quantity in cart
+router.post('/quantity/update', [checkIfAuthenticatedJWT], async function (req, res) {
+    let status = await cartServices.updateQuantityInCart(
+        req.user.id,
+        req.body.puzzle_id,
+        req.body.newQuantity
+    );
+    if (status) {
+        res.send(status);
+    } else {
+        res.send(status);
+    }
+});
+
 module.exports = router;
