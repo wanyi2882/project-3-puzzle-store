@@ -40,4 +40,18 @@ router.post('/quantity/update', [checkIfAuthenticatedJWT], async function (req, 
     }
 });
 
+// Process remove from cart
+router.post('/remove', [checkIfAuthenticatedJWT], async function (req, res) {
+    let status = await cartServices.removeFromCart(
+        req.user.id, 
+        req.body.puzzle_id
+    )
+
+    if (status) {
+        res.send(status);
+    } else {
+        res.send(status);
+    }
+})
+
 module.exports = router;
