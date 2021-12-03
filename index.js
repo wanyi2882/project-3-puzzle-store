@@ -98,7 +98,8 @@ const orderRoutes = require('./routes/order')
 const api = {
   'listings': require('./routes/api/listings'),
   'users': require('./routes/api/users'),
-  'cart': require('./routes/api/cart')
+  'cart': require('./routes/api/cart'),
+  'checkout': require('./routes/api/checkout')
 }
 
 // Register routes
@@ -116,6 +117,7 @@ async function main() {
 app.use('/api/listings', express.json(), api.listings)
 app.use('/api/users', express.json(), api.users)
 app.use('/api/cart', express.json(), api.cart)
+app.use('/api/checkout', express.json(), api.checkout)
 
 main();
 
