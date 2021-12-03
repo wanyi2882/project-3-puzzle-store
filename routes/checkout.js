@@ -5,6 +5,8 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const cartServices = require('../services/cart')
 
+const { Order, OrderStatus } = require("../models")
+
 // Display checkout route
 router.get('/', async function (req, res) {
     // Retrieve all items from user shopping cart
@@ -28,6 +30,7 @@ router.get('/', async function (req, res) {
         // Create object that remembers for a given puzzle id how many was ordered
         // And push it into metadata
         metadata.push({
+            'user_id': req.session.user.id,
             'puzzle_id': item.related('puzzle').get('id'),
             'quantity': item.get('quantity')
         })
@@ -39,6 +42,9 @@ router.get('/', async function (req, res) {
 
     let payment = {
         'payment_method_types': ['card'],
+        'shipping_address_collection': {
+            allowed_countries: ['SG'],
+        },
         'line_items': allCartItems,
         'success_url': process.env.STRIPE_SUCCESS_URL,
         'cancel_url': process.env.STRIPE_CANCEL_URL,
@@ -57,7 +63,7 @@ router.get('/', async function (req, res) {
 })
 
 // Post route for Stripe payment (Called by STRIPE)
-router.post('/process_payment', express.raw({ type: 'application/json' }), function (req, res) {
+router.post('/process_payment', express.raw({ type: 'application/json' }), async function (req, res) {
     let payload = req.body
 
     let endpoint_secret = process.env.STRIPE_ENDPOINT_SECRET
@@ -71,9 +77,26 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), funct
         event = Stripe.webhooks.constructEvent(payload, sigHeader, endpoint_secret)
         if (event.type == "checkout.session.completed") {
             let stripeSession = event.data.object
-            console.log(stripeSession)
+            // console.log(stripeSession)
             let metadata = JSON.parse(stripeSession.metadata.orders);
-            console.log(metadata);
+            let paymentStatus = stripeSession.payment_status
+
+            let status = await OrderStatus.where({
+                'status': paymentStatus
+            }).fetch({
+                'require': false
+            })
+
+            let orderContent = new Order({
+                'shipping_address': stripeSession.shipping.address.line1 + "," 
+                + stripeSession.shipping.address.line2 + "," 
+                + stripeSession.shipping.address.country + " "
+                + stripeSession.shipping.address.postal_code,
+                'order_status_id': status.id
+            })
+        
+            await orderContent.save()
+
             res.send({
                 'received': true
             })
