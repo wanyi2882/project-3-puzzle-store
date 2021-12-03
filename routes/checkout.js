@@ -32,7 +32,8 @@ router.get('/', async function (req, res) {
         metadata.push({
             'user_id': req.session.user.id,
             'puzzle_id': item.related('puzzle').get('id'),
-            'quantity': item.get('quantity')
+            'quantity': item.get('quantity'),
+            'price': item.related('puzzle').get('cost')
         })
     }
 
@@ -77,7 +78,7 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
         event = Stripe.webhooks.constructEvent(payload, sigHeader, endpoint_secret)
         if (event.type == "checkout.session.completed") {
             let stripeSession = event.data.object
-            // console.log(stripeSession)
+            console.log(stripeSession)
             let metadata = JSON.parse(stripeSession.metadata.orders);
             let paymentStatus = stripeSession.payment_status
 
@@ -88,14 +89,22 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
             })
 
             let orderContent = new Order({
-                'shipping_address': stripeSession.shipping.address.line1 + "," 
+                'shipping_address': stripeSession.shipping.name + "," 
+                + stripeSession.shipping.address.line1 + "," 
                 + stripeSession.shipping.address.line2 + "," 
                 + stripeSession.shipping.address.country + " "
                 + stripeSession.shipping.address.postal_code,
-                'order_status_id': status.id
+                'status_id': status.id,
+                'create_datetime': new Date(),
+                'total_cost': stripeSession.amount_total,
+                'user_id': metadata[0].user_id
             })
         
-            await orderContent.save()
+            await orderContent.save().then(function (newRow) {
+                let {id} = newRow.toJSON();
+                // Return the order id
+                console.log(id); 
+              })
 
             res.send({
                 'received': true
