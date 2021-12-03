@@ -89,4 +89,18 @@ const BlacklistedToken = bookshelf.model('BlacklistedToken',{
     'tableName': 'blacklisted_tokens'
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken };
+const Order = bookshelf.model('Order', {
+    'tableName': 'orders',
+    OrderStatus() {
+        return this.belongsTo('OrderStatus')
+    }
+})
+
+const OrderStatus = bookshelf.model('OrderStatus', {
+    'tableName': 'order_statuses',
+    Orders() {
+        return this.hasMany('Order')
+    }
+})
+
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken, Order, OrderStatus };
