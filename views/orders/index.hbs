@@ -1,0 +1,47 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Created On</th>
+            <th>Last Updated</th>
+            <th>Shipping Address</th>
+            <th>Total Amount Received</th>
+            <th>Status</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {{#each allOrders}}
+        <tr>
+            <td>
+                {{this.id}}
+            </td>
+            <td>
+                {{this.user_id}}
+            </td>
+            <td>
+                {{this.create_datetime}}
+            </td>
+            <td>
+                {{this.update_datetime}}
+            </td>
+            <td>
+                {{this.shipping_address}}
+            </td>
+            <td>
+                {{this.total_cost}}
+            </td>
+            <td>
+                {{this.OrderStatus.status}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/block}}
+
+{{/extends}}
