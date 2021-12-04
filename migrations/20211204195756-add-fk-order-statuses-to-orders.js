@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.addColumn("orders", "status_id", {
+  return db.addColumn("orders", "order_status_id", {
     type: "smallint",
     unsigned: true,
     notNull: true,
