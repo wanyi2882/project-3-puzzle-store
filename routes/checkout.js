@@ -5,7 +5,8 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const cartServices = require('../services/cart')
 
-const { Order, OrderStatus } = require("../models")
+const { OrderStatus } = require("../models")
+const orderDataLayer = require("../dal/order")
 
 // Display checkout route
 router.get('/', async function (req, res) {
@@ -88,23 +89,18 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
                 'require': false
             })
 
-            let orderContent = new Order({
-                'shipping_address': stripeSession.shipping.name + "," 
-                + stripeSession.shipping.address.line1 + "," 
-                + stripeSession.shipping.address.line2 + "," 
-                + stripeSession.shipping.address.country + " "
-                + stripeSession.shipping.address.postal_code,
-                'status_id': status.id,
-                'create_datetime': new Date(),
-                'total_cost': stripeSession.amount_total,
-                'user_id': metadata[0].user_id
-            })
+            let shippingAddress = stripeSession.shipping.name + "," 
+            + stripeSession.shipping.address.line1 + "," 
+            + stripeSession.shipping.address.line2 + "," 
+            + stripeSession.shipping.address.country + " "
+            + stripeSession.shipping.address.postal_code
+            let statusId = status.id
+            let createDateTime = new Date()
+            let updateDateTime = new Date()
+            let totalCost = stripeSession.amount_total
+            let userId = metadata[0].user_id
         
-            await orderContent.save().then(function (newRow) {
-                let {id} = newRow.toJSON();
-                // Return the order id
-                console.log(id); 
-              })
+            await orderDataLayer.createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId)
 
             res.send({
                 'received': true
