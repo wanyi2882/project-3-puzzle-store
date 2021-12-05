@@ -7,8 +7,14 @@ const { checkIfAuthenticated } = require('../middlewares');
 // Import in the Puzzle model
 const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
 
-// Import in DAL
+// Import in Listing DAL
 const { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames } = require('../dal/listings')
+
+// Import in Order DAL
+const { getOrderByPuzzleId } = require('../dal/order')
+
+//import in Cart DAL
+const { getCartByPuzzleId } = require('../dal/cart')
 
 // Import in the Forms
 const { bootstrapField, createPuzzleForm } = require('../forms');
@@ -234,11 +240,22 @@ router.post('/:listing_id/delete', [checkIfAuthenticated], async(req, res) => {
         require: true
     })
 
-    // Success Flash Message
-    req.flash("success_messages", `${listing.get('title')} has been deleted`)
+    // check if puzzle exists in shopping cart and orders
+    const existInCart = await getCartByPuzzleId(req.params.listing_id)
 
-    await listing.destroy()
-    res.redirect('/listings')
+    const existInOrder = await getOrderByPuzzleId(req.params.listing_id)
+
+    if (!existInCart && !existInOrder){
+        // Success Flash Message (Does not exist)
+        req.flash("success_messages", `${listing.get('title')} has been deleted`)
+
+        await listing.destroy()
+        res.redirect('/listings')
+    } else {
+        // Error Flash Message (Exist so cannot delete)
+        req.flash("error_messages", `${listing.get('title')} cannot be deleted`)
+        res.redirect('/listings');
+    }
 })
 
     module.exports = router;
