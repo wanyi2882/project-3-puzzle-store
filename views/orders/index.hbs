@@ -4,13 +4,14 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>Order ID</th>
             <th>User ID</th>
             <th>Created On</th>
             <th>Last Updated</th>
             <th>Shipping Address</th>
             <th>Total Amount Received</th>
             <th>Status</th>
+            <th>View Order Details</th>
         </tr>
 
     </thead>
@@ -37,6 +38,9 @@
             </td>
             <td>
                 {{this.OrderStatus.status}}
+            </td>
+            <td>
+                <a href="/orders/{{this.id}}/details">Order Details</a>
             </td>
         </tr>
         {{/each}}
