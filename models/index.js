@@ -80,7 +80,7 @@ const User = bookshelf.model('User',{
 
 const CartDetail = bookshelf.model('CartDetail', {
     tableName: 'cart_details',
-    puzzle() {
+    Puzzle() {
         return this.belongsTo('Puzzle')
     }    
 })
@@ -108,7 +108,7 @@ const OrderStatus = bookshelf.model('OrderStatus', {
 
 const OrderDetail = bookshelf.model('OrderDetail', {
     'tableName': 'order_details',
-    puzzle() {
+    Puzzle() {
         return this.belongsTo('Puzzle')
     }
 })
