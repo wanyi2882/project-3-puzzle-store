@@ -100,7 +100,18 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
             let totalCost = stripeSession.amount_total
             let userId = metadata[0].user_id
         
-            await orderDataLayer.createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId)
+            let order_id = await orderDataLayer.createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId)
+
+            // Create order details
+            await metadata.map(async eachOrderDetail => {
+                let individualCost = eachOrderDetail.price
+                let quantity = eachOrderDetail.quantity
+                let createDateTime =  new Date()
+                let orderId = order_id
+                let puzzleId = eachOrderDetail.puzzle_id
+
+                await orderDataLayer.createOrderDetail(individualCost, quantity, createDateTime, orderId, puzzleId)
+            })
 
             res.send({
                 'received': true
