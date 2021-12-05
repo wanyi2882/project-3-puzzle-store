@@ -1,4 +1,4 @@
-const { Order, OrderStatus } = require("../models")
+const { Order, OrderStatus, OrderDetail } = require("../models")
 
 // Get all OrderStatus
 async function getOrderStatus() {
@@ -24,7 +24,7 @@ async function userGetOrder(userId) {
     })
 }
 
-// Create one order and order details
+// Create one order
 async function createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId ) {
     let order = new Order({
         'shipping_address': shippingAddress,
@@ -37,10 +37,21 @@ async function createOrder(shippingAddress, statusId, createDateTime, updateDate
 
     return await order.save().then(function (newRow) {
         let {id} = newRow.toJSON();
-    // Return the order id
-    console.log(id); 
+        return id            
     })
 }
 
+// Create One Order Detail
+async function createOrderDetail(individualCost, quantity, createDateTime, orderId, puzzleId){
+    let orderDetail = new OrderDetail({
+        'individual_cost': individualCost,
+        'quantity': quantity,
+        'create_datetime': createDateTime,
+        'order_id': orderId,
+        'puzzle_id': puzzleId
+    })
+    return await orderDetail.save()
+}
 
-module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus }
+
+module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus, createOrderDetail }
