@@ -8,7 +8,7 @@ const { checkIfAuthenticated } = require('../middlewares');
 const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
 
 // Import in Listing DAL
-const { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames } = require('../dal/listings')
+const { getAllPuzzles, getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames } = require('../dal/listings')
 
 // Import in Order DAL
 const { getOrderByPuzzleId } = require('../dal/order')
@@ -21,9 +21,8 @@ const { bootstrapField, createPuzzleForm } = require('../forms');
 
 router.get('/', [checkIfAuthenticated], async (req, res) => {
     // Fetch all the puzzles (ie, SELECT * from products)
-    let puzzles = await Puzzle.collection().fetch({
-        withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
-    });
+    let puzzles = await getAllPuzzles()
+    
     res.render('listings/index', {
         'listings': puzzles.toJSON() // Convert collection to JSON
     })

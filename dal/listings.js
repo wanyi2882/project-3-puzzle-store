@@ -37,7 +37,9 @@ async function getFrames() {
 
 // Get All Puzzles
 async function getAllPuzzles() {
-    return await Puzzle.fetchAll();
+    return await Puzzle.collection().fetch({
+        withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
+    })
 }
 
 module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames, getAllPuzzles }
