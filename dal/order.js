@@ -5,6 +5,16 @@ async function getOrderStatus() {
     return await OrderStatus.fetchAll().map(status => [status.get('id'), status.get('status')])
 }
 
+// Get order by puzzle Id
+async function getOrderByPuzzleId(puzzleId) {
+    return await OrderDetail.collection().where({
+        'puzzle_id': puzzleId
+    }).fetch({
+        require: false,
+        withRelated: ['Puzzle']
+    })
+}
+
 // Retrieve all orders (for Admin)
 async function adminGetOrder() {
     return await Order.collection().fetch({
@@ -62,4 +72,4 @@ async function adminGetOrderDetails(orderId) {
     })
 }
 
-module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus, createOrderDetail, adminGetOrderDetails }
+module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus, createOrderDetail, adminGetOrderDetails, getOrderByPuzzleId }
