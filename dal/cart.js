@@ -6,7 +6,17 @@ async function getCart(userId) {
         'user_id': userId
     }).fetch({
         require: false,
-        withRelated: ['puzzle']
+        withRelated: ['Puzzle']
+    })
+}
+
+// Retrieve item in cart by puzzle ID
+async function getCartByPuzzleId(puzzleId) {
+    return await CartDetail.collection().where({
+        'puzzle_id': puzzleId
+    }).fetch({
+        require: false,
+        withRelated: ['Puzzle']
     })
 }
 
@@ -48,4 +58,4 @@ async function removeFromCart (userId, puzzleId) {
     await cartDetail.destroy()
 }
 
-module.exports = { getCart, getCartItemByPuzzleAndUser, createCartDetail, removeFromCart, updateQuantity }
+module.exports = { getCart, getCartItemByPuzzleAndUser, createCartDetail, removeFromCart, updateQuantity, getCartByPuzzleId }
