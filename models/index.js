@@ -93,6 +93,9 @@ const Order = bookshelf.model('Order', {
     'tableName': 'orders',
     OrderStatus() {
         return this.belongsTo('OrderStatus')
+    },
+    OrderDetail() {
+        return this.hasMany('OrderDetail')
     }
 })
 
@@ -103,4 +106,11 @@ const OrderStatus = bookshelf.model('OrderStatus', {
     }
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken, Order, OrderStatus };
+const OrderDetail = bookshelf.model('OrderDetail', {
+    'tableName': 'order_details',
+    puzzle() {
+        return this.belongsTo('Puzzle')
+    }
+})
+
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken, Order, OrderStatus, OrderDetail };
