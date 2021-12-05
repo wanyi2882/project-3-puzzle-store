@@ -13,4 +13,14 @@ router.get('/', async function (req, res) {
     })
 })
 
+//Display order details of each order
+router.get('/:order_id/details', async function (req, res) {
+    let orderDetail = await orderDataLayer.adminGetOrderDetails(req.params.order_id);
+
+    res.render('orders/details', {
+        'orderDetails': orderDetail.toJSON()
+    })
+
+})
+
 module.exports = router;
