@@ -53,5 +53,13 @@ async function createOrderDetail(individualCost, quantity, createDateTime, order
     return await orderDetail.save()
 }
 
+// Retrieve all order details of one order
+async function adminGetOrderDetails(orderId) {
+    return await OrderDetail.collection().where({
+        'order_id': orderId
+    }).fetch({
+        require: false
+    })
+}
 
-module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus, createOrderDetail }
+module.exports = { adminGetOrder, userGetOrder, createOrder, getOrderStatus, createOrderDetail, adminGetOrderDetails }
