@@ -95,7 +95,8 @@ router.post('/login', (req, res) => {
                     req.session.user = {
                         'id': user.get('id'),
                         'email': user.get('email'),
-                        'username': user.get('username')
+                        'username': user.get('username'),
+                        'role_type': user.get('role_type')
                     }
 
                     req.flash("success_messages", `Welcome back ${user.get('username')} !`)
