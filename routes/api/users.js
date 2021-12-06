@@ -29,10 +29,13 @@ router.post('/register', async function (req, res) {
     let user = new User({
         'username': req.body.username,
         'email': req.body.email,
-        'password': req.body.password
+        'password': req.body.password,
+        'role_type': req.body.role_type
     })
 
-    await user.save()
+    if (req.body.role_type == "user") {
+        await user.save()
+    }
 })
 
 // Post route for user login 
