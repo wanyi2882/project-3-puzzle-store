@@ -19,6 +19,16 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
+// Get route to display all users
+router.get('/', [checkIfAuthenticated], async function (req, res) {
+
+    let users = await User.collection().fetch()
+
+    res.render('users/index',{
+        'users': users.toJSON()
+    })
+})
+
 // Display user registration form
 router.get('/register', (req, res) => {
 
