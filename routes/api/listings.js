@@ -51,22 +51,26 @@ router.get('/', async (req, res) => {
 
         // Find by Size
         if (size) {
-            query.where('size_id', '=', size);
+            let selectedSize = size.split(",");
+            query.where('size_id', 'in', selectedSize);
         }
 
         // Find by Difficulty Level
         if (difficulty_level) {
-            query.where('difficulty_level_id', '=', difficulty_level)
+            let selectedLevel = difficulty_level.split(",")
+            query.where('difficulty_level_id', 'in', selectedLevel)
         }
 
         // Find by Age Group
         if (age_group) {
-            query.where('age_group_id', '=', age_group)
+            let selectedAge = age_group.split(",")
+            query.where('age_group_id', 'in', selectedAge)
         }
 
         // Find by material
         if (material) {
-            query.where('material_id', '=', material)
+            let selectedMaterial = material.split(",")
+            query.where('material_id', 'in', selectedMaterial)
         }
 
         // Find by Brand Name
@@ -97,8 +101,6 @@ router.get('/', async (req, res) => {
             withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
         })
 
-        console.log(title)
- 
         res.status(200);
         res.send(listings);
     } catch (e) {
