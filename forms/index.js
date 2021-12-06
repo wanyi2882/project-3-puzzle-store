@@ -38,14 +38,14 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
                 label: ['form-label']
             }
         }),
-        'cost': fields.string({
+        'cost': fields.number({
             label: 'Cost (in Cents)',
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
-            validators:[validators.integer()]
+            validators: [validators.integer()]
         }),
         'description': fields.string({
             required: true,
@@ -54,39 +54,39 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
                 label: ['form-label']
             }
         }),
-        'stock': fields.string({
+        'stock': fields.number({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
-            validators:[validators.integer()]
-        }),        
-        'length': fields.string({
+            validators: [validators.integer()]
+        }),
+        'length': fields.number({
             label: 'Length (in cm)',
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
-            validators:[validators.integer()]
-        }),        
-        'breadth': fields.string({
+            validators: [validators.integer()]
+        }),
+        'breadth': fields.number({
             label: 'Breadth (in cm)',
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             },
-            validators:[validators.integer()]
-        }),        
+            validators: [validators.integer()]
+        }),
         'brand': fields.string({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
             }
-        }),        
+        }),
         'theme_id': fields.string({
             label: 'Theme',
             required: true,
@@ -155,12 +155,13 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             widget: widgets.multipleSelect(),
             choices: frames
         }),
-        'image':fields.string({
+        'image': fields.string({
             cssClasses: {
                 label: ['form-label']
             },
-            widget: widgets.hidden()
-        })                        
+            widget: widgets.hidden(),
+            validators: [validators.url()]
+        })
     })
 };
 
@@ -174,19 +175,21 @@ const createRegistrationForm = () => {
                 label: ['form-label']
             }
         }),
-        'email': fields.string({
+        'email': fields.email({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.email()]
         }),
         'password': fields.password({
             required: true,
             errorAfterField: true,
             cssClasses: {
                 label: ['form-label']
-            }
+            },
+            validators: [validators.minlength(8)]
         }),
         'confirm_password': fields.password({
             required: true,
@@ -202,20 +205,22 @@ const createRegistrationForm = () => {
 // Create login form
 const createLoginForm = () => {
     return forms.create({
-        'email': fields.string({
-            'required': true,
-            'errorAfterField': true,
-            'cssClasses': {
-                'label': ['form-label']
-            }
-        }),
-        'password': fields.string({
+        'email': fields.email({
             'required': true,
             'errorAfterField': true,
             'cssClasses': {
                 'label': ['form-label']
             },
-            'widget': widgets.password()
+            validators: [validators.email()]
+        }),
+        'password': fields.password({
+            'required': true,
+            'errorAfterField': true,
+            'cssClasses': {
+                'label': ['form-label']
+            },
+            'widget': widgets.password(),
+            validators: [validators.minlength(8)]
         })
     })
 }
