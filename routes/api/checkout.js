@@ -17,9 +17,9 @@ router.post('/create-checkout-session', async function (req, res) {
     for (let item of items) {
         // Individual Cart Item object
         const cartItem = {
-            'name': item.related('puzzle').get('title'),
-            'amount': item.related('puzzle').get('cost'),
-            ['images']: [item.related('puzzle').get('image')],
+            'name': item.related('Puzzle').get('title'),
+            'amount': item.related('Puzzle').get('cost'),
+            ['images']: [item.related('Puzzle').get('image')],
             'quantity': item.get('quantity'),
             'currency': 'SGD'
         }
@@ -31,8 +31,9 @@ router.post('/create-checkout-session', async function (req, res) {
         // And push it into metadata
         metadata.push({
             'user_id': userId,
-            'puzzle_id': item.related('puzzle').get('id'),
-            'quantity': item.get('quantity')
+            'puzzle_id': item.related('Puzzle').get('id'),
+            'quantity': item.get('quantity'),
+            'price': item.related('Puzzle').get('cost')
         })
     }
 
