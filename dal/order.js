@@ -30,7 +30,7 @@ async function userGetOrder(userId) {
         'user_id': userId
     }).fetch({
         require: false,
-        withRelated: ['OrderStatus']
+        withRelated: ['OrderStatus', 'OrderDetail']
     })
 }
 

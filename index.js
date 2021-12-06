@@ -99,7 +99,8 @@ const api = {
   'listings': require('./routes/api/listings'),
   'users': require('./routes/api/users'),
   'cart': require('./routes/api/cart'),
-  'checkout': require('./routes/api/checkout')
+  'checkout': require('./routes/api/checkout'),
+  'orders': require('./routes/api/orders')
 }
 
 // Register routes
@@ -118,9 +119,12 @@ app.use('/api/listings', express.json(), api.listings)
 app.use('/api/users', express.json(), api.users)
 app.use('/api/cart', express.json(), api.cart)
 app.use('/api/checkout', express.json(), api.checkout)
+app.use('/api/orders', express.json(), api.orders)
 
 main();
 
-app.listen(process.env.PORT, () => {
+// Testing port: 3000
+// Deployed poert: process.env.PORT
+app.listen(3000, () => {
   console.log("Server has started");
 });
