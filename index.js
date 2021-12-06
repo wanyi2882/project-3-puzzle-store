@@ -121,6 +121,6 @@ app.use('/api/checkout', express.json(), api.checkout)
 
 main();
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });
