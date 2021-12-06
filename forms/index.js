@@ -225,4 +225,26 @@ const createLoginForm = () => {
     })
 }
 
-module.exports = { createPuzzleForm, bootstrapField, createRegistrationForm, createLoginForm };
+// Create update order form
+const createUpdateOrderForm = (status) => {
+    return forms.create({
+        'shipping_address': fields.string({
+            'required': true,
+            'errorAfterField': true,
+            'cssClasses': {
+                'label': ['form-label']
+            }
+        }),
+        'status': fields.string({
+            'required': true,
+            'errorAfterField': true,
+            'cssClasses': {
+                'label': ['form-label']
+            },
+            widget: widgets.select(),
+            choices: status
+        })
+    })
+}
+
+module.exports = { createPuzzleForm, bootstrapField, createRegistrationForm, createLoginForm, createUpdateOrderForm };

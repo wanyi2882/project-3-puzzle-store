@@ -1,0 +1,30 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+
+<h1>Update Order ID: {{orderById.id}}</h1>
+
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+    <div class="mb-3">
+        <label class="form-label">Created Date Time: {{orderById.create_datetime}} </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Last Updated Date Time: {{orderById.update_datetime}} </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">User ID: {{orderById.user_id}} </label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Total Amount: {{orderById.total_cost}} </label>
+    </div>
+    {{{orderForm}}}
+
+    <input type="submit" value="Update Order" class="btn btn-primary" />
+    <button class="btn" ><a href="/orders">Cancel</a></button>
+</form>
+
+{{/block}}
+
+{{/extends}}
