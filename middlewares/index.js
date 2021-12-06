@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const checkIfAuthenticated = (req, res, next) => {
 
-    if (req.session.user) {
+    if (req.session.user && req.session.user.role_type == "admin") {
         next();
     } else {
         req.flash('error_messages', 'You need to sign in to access this page');
