@@ -2,9 +2,20 @@
 
 const jwt = require('jsonwebtoken');
 
-const checkIfAuthenticated = (req, res, next) => {
+// Restricted Access for Shop Owner Only
+const checkIfAuthenticatedAdmin = (req, res, next) => {
 
-    if (req.session.user && req.session.user.role_type == "admin") {
+    if (req.session.user && req.session.user.role_type == "owner") {
+        next();
+    } else {
+        req.flash('error_messages', 'You need to sign in to access this page');
+        res.redirect('/users/login');
+    }
+}
+// Restricted Access for Shop Owner and Manager
+const checkIfAuthenticatedAdminAndManager = (req, res, next) => {
+
+    if (req.session.user && (req.session.user.role_type == "owner" || req.session.user.role_type == "manager")) {
         next();
     } else {
         req.flash('error_messages', 'You need to sign in to access this page');
@@ -12,6 +23,7 @@ const checkIfAuthenticated = (req, res, next) => {
     }
 }
 
+// Authentication for API
 const checkIfAuthenticatedJWT = (req,res,next) => {
     // Try to get authorization headers
     const authHeader = req.headers.authorization;
@@ -31,4 +43,4 @@ const checkIfAuthenticatedJWT = (req,res,next) => {
     }
 }
 
-module.exports = { checkIfAuthenticated, checkIfAuthenticatedJWT }
+module.exports = { checkIfAuthenticatedAdmin, checkIfAuthenticatedAdminAndManager, checkIfAuthenticatedJWT }

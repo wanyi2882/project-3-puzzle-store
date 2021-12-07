@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import Middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
 const { Order, OrderStatus } = require("../models");
 
@@ -12,7 +12,7 @@ const orderDataLayer = require("../dal/order");
 const { bootstrapField, createUpdateOrderForm } = require('../forms');
 
 // Display all orders
-router.get('/', [checkIfAuthenticated], async function (req, res) {
+router.get('/', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
     let allOrders = await orderDataLayer.adminGetOrder();
     res.render('orders/index', {
         'allOrders': allOrders.toJSON()
@@ -20,7 +20,7 @@ router.get('/', [checkIfAuthenticated], async function (req, res) {
 })
 
 // Display order details of each order
-router.get('/:order_id/details', [checkIfAuthenticated], async function (req, res) {
+router.get('/:order_id/details', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
     let orderDetail = await orderDataLayer.adminGetOrderDetails(req.params.order_id);
 
     res.render('orders/details', {
@@ -29,7 +29,7 @@ router.get('/:order_id/details', [checkIfAuthenticated], async function (req, re
 })
 
 // Update status of order
-router.get('/:order_id/update', [checkIfAuthenticated], async function (req, res) {
+router.get('/:order_id/update', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
 
     // Fetch the data to update
     const order = await Order.where({
@@ -53,7 +53,7 @@ router.get('/:order_id/update', [checkIfAuthenticated], async function (req, res
 })
 
 // Process order update
-router.post('/:order_id/update', [checkIfAuthenticated], async function (req, res) {
+router.post('/:order_id/update', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
 
     // Fetch the data to update
     const order = await Order.where({
@@ -114,7 +114,7 @@ router.post('/:order_id/update', [checkIfAuthenticated], async function (req, re
 })
 
 // Delete an order
-router.get('/:order_id/delete', [checkIfAuthenticated], async (req, res) => {
+router.get('/:order_id/delete', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     // Fetch the data to delete
     const order = await Order.where({
@@ -130,7 +130,7 @@ router.get('/:order_id/delete', [checkIfAuthenticated], async (req, res) => {
 })
 
 // Process delete listing
-router.post('/:order_id/delete', [checkIfAuthenticated], async (req, res) => {
+router.post('/:order_id/delete', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     // Fetch the data to delete
     const order = await Order.where({
@@ -148,6 +148,5 @@ router.post('/:order_id/delete', [checkIfAuthenticated], async (req, res) => {
     res.redirect('/orders')
 
 })
-
 
 module.exports = router;

@@ -8,7 +8,7 @@ const { User } = require('../models');
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms');
 
 // Import Middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const { checkIfAuthenticatedAdmin, checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
 // Create Hash Password
 const crypto = require('crypto');
@@ -20,7 +20,7 @@ const getHashedPassword = (password) => {
 }
 
 // Get route to display all users
-router.get('/', [checkIfAuthenticated], async function (req, res) {
+router.get('/', [checkIfAuthenticatedAdmin], async function (req, res) {
 
     let users = await User.collection().fetch()
 
@@ -90,7 +90,9 @@ router.post('/login', (req, res) => {
 
             // If user exists, check if password matches
             if(user) {
-                if((user.get('password') == getHashedPassword(form.data.password)) && (user.get('role_type') == 'admin')) {
+                if((user.get('password') == getHashedPassword(form.data.password)) 
+                && ((user.get('role_type') == 'owner') || (user.get('role_type') == 'manager'))
+                ) {
                     // Proceed to login
                     req.session.user = {
                         'id': user.get('id'),
@@ -124,18 +126,17 @@ router.post('/login', (req, res) => {
 })
 
 // Display Profile page
-router.get('/profile', [checkIfAuthenticated], (req, res) => {
+router.get('/profile', [checkIfAuthenticatedAdminAndManager], (req, res) => {
     res.render('users/profile', {
         user: req.session.user
     })
 })
 
 // Logout of user
-router.get('/logout', [checkIfAuthenticated], (req,res)=>{
+router.get('/logout', [checkIfAuthenticatedAdminAndManager], (req,res)=>{
     req.session.user = null;
     req.flash('success_messages', "Logged out successfully");
     res.redirect('/users/login');
     });
-
 
 module.exports = router;

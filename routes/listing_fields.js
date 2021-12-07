@@ -5,10 +5,10 @@ const router = express.Router();
 const { Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
 
 // Import Middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
 // Display all Listing Fields
-router.get('/', [checkIfAuthenticated], async function (req, res) {
+router.get('/', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
     let field = ["theme", "age group"]
 
     res.render('listing_fields/index', {
@@ -17,7 +17,7 @@ router.get('/', [checkIfAuthenticated], async function (req, res) {
 })
 
 // Get Theme Field
-router.get('/theme', [checkIfAuthenticated], async function (req, res) {
+router.get('/theme', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
 
     let getThemesField = await Theme.collection().fetch()
 
@@ -28,14 +28,14 @@ router.get('/theme', [checkIfAuthenticated], async function (req, res) {
 })
 
 // Create New Theme
-router.get('/theme/create', [checkIfAuthenticated], async function (req, res) {
+router.get('/theme/create', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
     res.render('listing_fields/create', {
         title: "theme"
     })
 })
 
 // Process New Theme
-router.post('/theme/create', [checkIfAuthenticated], async function (req, res) {
+router.post('/theme/create', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
     let theme = new Theme({"name": req.body.theme})
     theme.save()
 
@@ -46,7 +46,7 @@ router.post('/theme/create', [checkIfAuthenticated], async function (req, res) {
 })
 
 // Update Theme
-router.get('/theme/:theme_id/update', [checkIfAuthenticated], async (req, res) => {
+router.get('/theme/:theme_id/update', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     const theme = await Theme.where({
         id: req.params.theme_id
@@ -61,7 +61,7 @@ router.get('/theme/:theme_id/update', [checkIfAuthenticated], async (req, res) =
 })
 
 // Process Update Theme
-router.post('/theme/:theme_id/update', [checkIfAuthenticated], async (req, res) => {
+router.post('/theme/:theme_id/update', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     const theme = await Theme.where({
         id: req.params.theme_id
@@ -82,7 +82,7 @@ router.post('/theme/:theme_id/update', [checkIfAuthenticated], async (req, res) 
 })
 
 // Delete Theme
-router.get('/theme/:theme_id/delete', [checkIfAuthenticated], async (req, res) => {
+router.get('/theme/:theme_id/delete', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     const theme = await Theme.where({
         id: req.params.theme_id
@@ -97,7 +97,7 @@ router.get('/theme/:theme_id/delete', [checkIfAuthenticated], async (req, res) =
 })
 
 // Process Delete Theme
-router.post('/theme/:theme_id/delete', [checkIfAuthenticated], async (req, res) => {
+router.post('/theme/:theme_id/delete', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     const theme = await Theme.where({
         id: req.params.theme_id

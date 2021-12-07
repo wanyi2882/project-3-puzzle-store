@@ -8,8 +8,11 @@ const cartServices = require('../services/cart')
 const { OrderStatus } = require("../models")
 const orderDataLayer = require("../dal/order")
 
+// Import Middleware
+const { checkIfAuthenticatedAdmin } = require('../middlewares');
+
 // Display checkout route
-router.get('/', async function (req, res) {
+router.get('/', [checkIfAuthenticatedAdmin], async function (req, res) {
     // Retrieve all items from user shopping cart
     let items = await cartServices.getShoppingCart(req.session.user.id)
     let allCartItems = []

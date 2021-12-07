@@ -5,10 +5,10 @@ const router = express.Router();
 const cartServices = require('../services/cart');
 
 // Import Middleware
-const { checkIfAuthenticated } = require('../middlewares');
+const { checkIfAuthenticatedAdmin } = require('../middlewares');
 
 // Display all items in the cart
-router.get('/', [checkIfAuthenticated], async function (req, res) {
+router.get('/', [checkIfAuthenticatedAdmin], async function (req, res) {
     let userId = req.session.user.id;
     let cartDetails = await cartServices.getShoppingCart(userId);
     res.render('cart/index', {
@@ -17,7 +17,7 @@ router.get('/', [checkIfAuthenticated], async function (req, res) {
 })
 
 // Add item to cart
-router.get('/:puzzle_id/add', [checkIfAuthenticated], async function (req, res) {
+router.get('/:puzzle_id/add', [checkIfAuthenticatedAdmin], async function (req, res) {
     let userId = req.session.user.id;
     let puzzleId = req.params.puzzle_id;
 
@@ -32,7 +32,7 @@ router.get('/:puzzle_id/add', [checkIfAuthenticated], async function (req, res) 
 })
 
 // Process update quantity in cart
-router.post('/:puzzle_id/quantity/update', [checkIfAuthenticated], async function (req, res) {
+router.post('/:puzzle_id/quantity/update', [checkIfAuthenticatedAdmin], async function (req, res) {
     let status = await cartServices.updateQuantityInCart(req.session.user.id,
         req.params.puzzle_id,
         req.body.newQuantity
@@ -46,7 +46,7 @@ router.post('/:puzzle_id/quantity/update', [checkIfAuthenticated], async functio
 });
 
 // Remove item from cart
-router.post('/:puzzle_id/remove', [checkIfAuthenticated], async function (req, res) {
+router.post('/:puzzle_id/remove', [checkIfAuthenticatedAdmin], async function (req, res) {
     let status = await cartServices.removeFromCart(req.session.user.id, req.params.puzzle_id)
 
     if (status) {
@@ -57,6 +57,5 @@ router.post('/:puzzle_id/remove', [checkIfAuthenticated], async function (req, r
 
     res.redirect('/cart');
 })
-
 
 module.exports = router;
