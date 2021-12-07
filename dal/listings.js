@@ -42,4 +42,11 @@ async function getAllPuzzles() {
     })
 }
 
-module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames, getAllPuzzles }
+// Get only Puzzle ID and Title
+async function getPuzzleIDandTitle() {
+    return await Puzzle.fetchAll().map(puzzle => [puzzle.get('id'), puzzle.get('title')])
+}
+
+
+module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames, getAllPuzzles,
+                getPuzzleIDandTitle }
