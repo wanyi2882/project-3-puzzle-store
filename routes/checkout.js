@@ -7,6 +7,7 @@ const cartServices = require('../services/cart')
 
 const { OrderStatus } = require("../models")
 const orderDataLayer = require("../dal/order")
+const listingDataLayer = require("../dal/listings")
 
 // Import Middleware
 const { checkIfAuthenticatedAdmin } = require('../middlewares');
@@ -21,9 +22,9 @@ router.get('/', [checkIfAuthenticatedAdmin], async function (req, res) {
     for (let item of items) {
         // Individual Cart Item object
         const cartItem = {
-            'name': item.related('puzzle').get('title'),
-            'amount': item.related('puzzle').get('cost'),
-            ['images']: [item.related('puzzle').get('image')],
+            'name': item.related('Puzzle').get('title'),
+            'amount': item.related('Puzzle').get('cost'),
+            ['images']: [item.related('Puzzle').get('image')],
             'quantity': item.get('quantity'),
             'currency': 'SGD'
         }
@@ -35,9 +36,9 @@ router.get('/', [checkIfAuthenticatedAdmin], async function (req, res) {
         // And push it into metadata
         metadata.push({
             'user_id': req.session.user.id,
-            'puzzle_id': item.related('puzzle').get('id'),
+            'puzzle_id': item.related('Puzzle').get('id'),
             'quantity': item.get('quantity'),
-            'price': item.related('puzzle').get('cost')
+            'price': item.related('Puzzle').get('cost')
         })
     }
 
@@ -92,28 +93,41 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
                 'require': false
             })
 
-            let shippingAddress = stripeSession.shipping.name + "," 
-            + stripeSession.shipping.address.line1 + "," 
-            + stripeSession.shipping.address.line2 + "," 
-            + stripeSession.shipping.address.country + " "
-            + stripeSession.shipping.address.postal_code
+            let shippingAddress = stripeSession.shipping.name + ","
+                + stripeSession.shipping.address.line1 + ","
+                + stripeSession.shipping.address.line2 + ","
+                + stripeSession.shipping.address.country + " "
+                + stripeSession.shipping.address.postal_code
             let statusId = status.id
             let createDateTime = new Date()
             let updateDateTime = new Date()
             let totalCost = stripeSession.amount_total
             let userId = metadata[0].user_id
-        
+
             let order_id = await orderDataLayer.createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId)
 
             // Create order details
             await metadata.map(async eachOrderDetail => {
                 let individualCost = eachOrderDetail.price
                 let quantity = eachOrderDetail.quantity
-                let createDateTime =  new Date()
+                let createDateTime = new Date()
                 let orderId = order_id
                 let puzzleId = eachOrderDetail.puzzle_id
 
+                // Create One Order Detail
                 await orderDataLayer.createOrderDetail(individualCost, quantity, createDateTime, orderId, puzzleId)
+
+                // Remove cart item from cart
+                await cartServices.removeFromCart(userId, puzzleId)
+
+                // Reduce stock Count by quantity Ordered
+                const puzzle = await listingDataLayer.getPuzzleByID(puzzleId)
+                const currentStock = puzzle.get('stock')
+
+                puzzle.set({
+                    "stock": parseInt(currentStock - quantity)
+                })
+                puzzle.save()
             })
 
             res.send({

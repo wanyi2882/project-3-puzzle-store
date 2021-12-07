@@ -47,6 +47,13 @@ async function getPuzzleIDandTitle() {
     return await Puzzle.fetchAll().map(puzzle => [puzzle.get('id'), puzzle.get('title')])
 }
 
+// Get Puzzle by ID and stock count
+async function getPuzzleByID(puzzleId) {
+    return await Puzzle.where({
+        'id': puzzleId
+    }).fetch()
+}
+
 
 module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames, getAllPuzzles,
-                getPuzzleIDandTitle }
+                getPuzzleIDandTitle, getPuzzleByID }
