@@ -247,4 +247,46 @@ const createUpdateOrderForm = (status) => {
     })
 }
 
-module.exports = { createPuzzleForm, bootstrapField, createRegistrationForm, createLoginForm, createUpdateOrderForm };
+// Create search order form
+const createSearchOrderForm = (status, puzzle, users) => {
+    return forms.create({
+        'order_status_id': fields.string({            
+            required: false,
+            errorAfterField: true,
+            label: "Order Status",
+            cssClasses: {
+                label:['form-label']
+            },
+            widget: widgets.multipleSelect(),
+            choices: status
+        }),
+        'puzzle_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            label: "Puzzle",
+            cssClasses: {
+                label:['form-label']
+            },
+            'widget': widgets.multipleSelect(),
+            choices: puzzle
+        }),
+        'user_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            label: "User",
+            cssClasses: {
+                label:['form-label']
+            },
+            'widget': widgets.multipleSelect(),
+            choices: users
+        })
+
+    })
+}
+
+module.exports = { createPuzzleForm, 
+                bootstrapField, 
+                createRegistrationForm, 
+                createLoginForm, 
+                createUpdateOrderForm, 
+                createSearchOrderForm };

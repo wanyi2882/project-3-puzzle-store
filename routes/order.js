@@ -4,18 +4,86 @@ const router = express.Router();
 // Import Middleware
 const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
-const { Order, OrderStatus } = require("../models");
+const { User, Order, OrderStatus, OrderDetail } = require("../models");
 
 const orderDataLayer = require("../dal/order");
+const listingDataLayer = require("../dal/listings")
 
 // Import in the Forms
-const { bootstrapField, createUpdateOrderForm } = require('../forms');
+const { bootstrapField, createUpdateOrderForm, createSearchOrderForm } = require('../forms');
 
 // Display all orders
 router.get('/', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
-    let allOrders = await orderDataLayer.adminGetOrder();
-    res.render('orders/index', {
-        'allOrders': allOrders.toJSON()
+
+    let status = await orderDataLayer.getOrderStatus()
+    let puzzle = await listingDataLayer.getPuzzleIDandTitle()
+    let users = await User.fetchAll().map(user => [user.get('id'), user.get('username')])
+
+    let searchForm = createSearchOrderForm(status, puzzle, users);
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+
+            let allOrders = await orderDataLayer.adminGetOrder();
+
+            res.render('orders/index', {
+                'allOrders': allOrders.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+
+            let status = form.data.order_status_id;
+            let puzzle = form.data.puzzle_id;
+            let user = form.data.user_id;
+
+            let query = Order.collection();
+            let queryOrderDetails = OrderDetail.collection()
+
+            // Find Order Status in Orders Table
+            if (status) {
+                query.where('order_status_id', '=', status);
+            }
+
+            // Find User in Orders Table
+            if (user) {
+                query.where('user_id', '=', user);
+            }
+
+            // Find Puzzle ID in Order Details Table
+            if (puzzle) {
+                queryOrderDetails.where('puzzle_id', '=', puzzle)
+            }
+
+            // Fetch Order Details with matching Puzzle Id
+            let orderDetails = await queryOrderDetails.fetch()
+
+            // Set Order ID from order details in an Array
+            let orderId = orderDetails.toJSON().map(order => order.order_id)
+
+            // Search for Order Id in Orders Table
+            if (orderId) {
+                query.where('id', 'in', orderId);
+            }
+
+            // Execute all the query
+            let allOrders = await query.fetch({
+                withRelated: ['OrderStatus']
+            });
+            res.render('orders/index', {
+                'allOrders': allOrders.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+
+            let allOrders = await orderDataLayer.adminGetOrder();
+
+            res.render('orders/index', {
+                'allOrders': allOrders.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        }
     })
 })
 
@@ -144,7 +212,7 @@ router.post('/:order_id/delete', [checkIfAuthenticatedAdminAndManager], async (r
     req.flash("success_messages", `Order No. ${order.get('id')} has been deleted`)
 
     await order.destroy()
-    
+
     res.redirect('/orders')
 
 })
