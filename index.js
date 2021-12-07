@@ -93,6 +93,7 @@ const userRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart')
 const checkoutRoutes = require('./routes/checkout')
 const orderRoutes = require('./routes/order')
+const listingFieldsRoutes = require('./routes/listing_fields')
 
 // Import API routes
 const api = {
@@ -111,7 +112,8 @@ async function main() {
     app.use('/users', userRoutes);
     app.use('/cart', cartRoutes);
     app.use('/checkout', checkoutRoutes);
-    app.use('/orders', orderRoutes)
+    app.use('/orders', orderRoutes);
+    app.use('/listing_fields', listingFieldsRoutes)
 }
 
 //  Register API routes

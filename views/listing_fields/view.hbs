@@ -1,0 +1,31 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<table class="table">
+    <h3>All {{title}}s</h3>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Update </th>
+            <th>Delete </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {{#each fields}}
+        <tr>
+            <td> {{this.id}} </td>
+            <td> {{this.name}} </td>
+            <td> <a href="/listing_fields/{{@root.title}}/{{this.id}}/update">Update</a> </td>
+            </td>
+            <td> <a href="/listing_fields/{{@root.title}}/{{this.id}}/delete">Delete</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+    <button class="btn"><a href="/listing_fields">Back</a></button>
+
+{{/block}}
+
+{{/extends}}
