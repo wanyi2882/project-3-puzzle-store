@@ -13,16 +13,13 @@ router.get('/', async (req, res) => {
     try {
 
         let keyword = req.query.keyword;
-        let min_cost = req.query.min_cost;
-        let max_cost = req.query.max_cost;
+        let min_cost = parseInt(req.query.min_cost) * 100;
+        let max_cost = parseInt(req.query.max_cost) * 100;
         let size = req.query.size;
         let difficulty_level = req.query.difficulty_level;
         let age_group = req.query.age_group;
-        let material = req.query.material;
-        let brand = req.query.brand;
         let theme = req.query.theme;
         let tags = req.query.tags;
-        let frames = req.query.frames;
 
         // create a query that is the eqv. of "SELECT * FROM products WHERE 1"
         // this query is deferred because we never call fetch on it.
@@ -32,8 +29,8 @@ router.get('/', async (req, res) => {
         // Find by Title or Description
         if (keyword) {
             query
-            .where(keyword => keyword.where('title', 'like', `%${keyword}%`)
-            .orWhere('description', 'like', `%${keyword}%`))
+                .where(keyword => keyword.where('title', 'like', `%${keyword}%`)
+                    .orWhere('description', 'like', `%${keyword}%`))
         }
 
         // Find by min and/or max cost
@@ -63,20 +60,10 @@ router.get('/', async (req, res) => {
             query.where('age_group_id', 'in', selectedAge)
         }
 
-        // Find by material
-        if (material) {
-            let selectedMaterial = material.split(",")
-            query.where('material_id', 'in', selectedMaterial)
-        }
-
-        // Find by Brand Name
-        if (brand) {
-            query.where('brand', 'like', `%${brand}%`)
-        }
-
         // Find by Theme
         if (theme) {
-            query.where('theme', '=', theme)
+            let selectedTheme = theme.split(",")
+            query.where('theme_id', 'in', selectedTheme)
         }
 
         // If tags is not empty
@@ -84,13 +71,6 @@ router.get('/', async (req, res) => {
             let selectedTags = tags.split(',');
             query.query('join', 'puzzles_tags', 'puzzles.id', 'puzzle_id')
                 .where('tag_id', 'in', selectedTags);
-        }
-
-        // If Frames is not empty
-        if (frames) {
-            let selectedFrames = frames.split(',');
-            query.query('join', 'frames_puzzles', 'puzzles.id', 'puzzle_id')
-                .where('frame_id', 'in', selectedFrames);
         }
 
         let listings = await query.fetch({
@@ -107,5 +87,73 @@ router.get('/', async (req, res) => {
     }
 })
 
+// Get Themes Table API Route
+router.get('/get_themes', async (req, res) => {
+    try {
+        let themes = await productDataLayer.getThemes();
+        res.status(200);
+        res.send(themes)
+    }
+    catch (e) {
+        res.send({
+            'error': "We have encountered an internal server error"
+        })
+    }
+})
 
+// Get Themes Table API Route
+router.get('/get_difficulty_levels', async (req, res) => {
+    try {
+        let levels = await productDataLayer.getDifficultyLevels();
+        res.status(200);
+        res.send(levels)
+    }
+    catch (e) {
+        res.send({
+            'error': "We have encountered an internal server error"
+        })
+    }
+})
+
+// Get Size Table API Route
+router.get('/get_sizes', async (req, res) => {
+    try {
+        let sizes = await productDataLayer.getSizes();
+        res.status(200);
+        res.send(sizes)
+    }
+    catch (e) {
+        res.send({
+            'error': "We have encountered an internal server error"
+        })
+    }
+})
+
+// Get Tags Table API Route
+router.get('/get_tags', async (req, res) => {
+    try {
+        let tags = await productDataLayer.getTags();
+        res.status(200);
+        res.send(tags)
+    }
+    catch (e) {
+        res.send({
+            'error': "We have encountered an internal server error"
+        })
+    }
+})
+
+// Get Age Group Table API Route
+router.get('/get_age_groups', async (req, res) => {
+    try {
+        let ageGroup = await productDataLayer.getAgeGroups();
+        res.status(200);
+        res.send(ageGroup)
+    }
+    catch (e) {
+        res.send({
+            'error': "We have encountered an internal server error"
+        })
+    }
+})
 module.exports = router;
