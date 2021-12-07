@@ -17,14 +17,84 @@ const { getOrderByPuzzleId } = require('../dal/order')
 const { getCartByPuzzleId } = require('../dal/cart')
 
 // Import in the Forms
-const { bootstrapField, createPuzzleForm } = require('../forms');
+const { bootstrapField, createPuzzleForm, createSearchListingForm } = require('../forms');
 
 router.get('/', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
-    // Fetch all the puzzles (ie, SELECT * from products)
-    let puzzles = await getAllPuzzles()
-    
-    res.render('listings/index', {
-        'listings': puzzles.toJSON() // Convert collection to JSON
+
+    const themes = await getThemes()
+    const sizes = await getSizes()
+    const age_groups = await getAgeGroups()
+    const difficulty_levels = await getDifficultyLevels()
+    const materials = await getMaterials()
+
+    let searchForm = createSearchListingForm(themes, sizes, age_groups, difficulty_levels, materials);
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let listings = await getAllPuzzles()
+
+            res.render('listings/index', {
+                'listings': listings.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            let query = Puzzle.collection();
+
+            if (form.data.title) {
+                // add a where clause to its back
+                query.where('title', 'like', `%${form.data.title}%`);
+            }
+
+            if (form.data.min_cost) {
+                query.where('cost', '>=', form.data.min_cost);
+            }
+
+            if (form.data.max_cost) {
+                query.where('cost', '<=', form.data.max_cost);
+            }
+
+            if (form.data.stock) {
+                query.where('stock', '<=', form.data.stock);
+            }
+
+            if (form.data.theme_id) {
+                query.where('theme_id', '=', form.data.theme_id);
+            }
+
+            if (form.data.size_id) {
+                query.where('size_id', '=', form.data.size_id);
+            }
+
+            if (form.data.age_group_id) {
+                query.where('age_group_id', '=', form.data.age_group_id);
+            }
+
+            if (form.data.difficulty_level_id) {
+                query.where('difficulty_level_id', '=', form.data.difficulty_level_id)
+            }
+
+            if (form.data.material_id) {
+                query.where('material_id', '=', form.data.material_id)
+            }
+            // execute the query
+            let listings = await query.fetch({
+                withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
+            });
+
+            res.render('listings/index', {
+                'listings': listings.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        },
+        'error': async (form) => {
+            let listings = await getAllPuzzles()
+
+            res.render('listings/index', {
+                'listings': listings.toJSON(),
+                'searchForm': form.toHTML(bootstrapField)
+            })
+        }
     })
 })
 
@@ -230,7 +300,7 @@ router.get('/:listing_id/delete', [checkIfAuthenticatedAdminAndManager], async (
 })
 
 // Process delete listing
-router.post('/:listing_id/delete', [checkIfAuthenticatedAdminAndManager], async(req, res) => {
+router.post('/:listing_id/delete', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
 
     // Fetch data to delete
     const listing = await Puzzle.where({
@@ -244,7 +314,7 @@ router.post('/:listing_id/delete', [checkIfAuthenticatedAdminAndManager], async(
 
     const existInOrder = await getOrderByPuzzleId(req.params.listing_id)
 
-    if (!existInCart && !existInOrder){
+    if (!existInCart && !existInOrder) {
         // Success Flash Message (Does not exist)
         req.flash("success_messages", `${listing.get('title')} has been deleted`)
 

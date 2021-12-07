@@ -1,6 +1,14 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+
+<h3>Search and Filter Listings</h3>
+<form method="GET">
+    {{{searchForm}}}
+    <input type="submit" value="Search" class="btn btn-primary btn-sm my-3"/>
+    <button class="btn btn-sm"><a href="/listings">Reset Search</a></button>
+</form>
+
 <div class="table-responsive">
     <table class="table">
         <thead>

@@ -45,7 +45,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         'description': fields.string({
             required: true,
@@ -60,7 +60,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         'length': fields.number({
             label: 'Length (in cm)',
@@ -69,7 +69,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         'breadth': fields.number({
             label: 'Breadth (in cm)',
@@ -78,7 +78,7 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             cssClasses: {
                 label: ['form-label']
             },
-            validators: [validators.integer()]
+            validators: [validators.integer(), validators.min(0)]
         }),
         'brand': fields.string({
             required: true,
@@ -284,9 +284,82 @@ const createSearchOrderForm = (status, puzzle, users) => {
     })
 }
 
+// Create Search Listing form
+const createSearchListingForm = (themes, sizes, ageGroups, difficultyLevels, materials) => {
+    return forms.create({
+        'title': fields.string({            
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            }
+        }),
+        'stock': fields.string({
+            required: false,
+            validators: [validators.integer(), validators.min(0)],
+            errorAfterField: true,
+            label: "Stock Count Below",
+            cssClasses: {
+                label:['form-label']
+            }       
+        }),
+        'theme_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            },
+            label: "Theme",
+            choices: themes,
+            widget: widgets.multipleSelect()     
+        }),
+        'size_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            },
+            label: "Sizes (Pieces)",
+            choices: sizes,
+            widget: widgets.multipleSelect()
+        }),
+        'age_group_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            },
+            label: "Age Groups",
+            choices: ageGroups,
+            widget: widgets.multipleSelect()
+        }),
+        'difficulty_level_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            },
+            label: "Difficulty Levels",
+            choices: difficultyLevels,
+            widget: widgets.multipleSelect()
+        }),
+        'material_id': fields.string({
+            required: false,
+            errorAfterField: true,
+            cssClasses: {
+                label:['form-label']
+            },
+            label: "Materials",
+            choices: materials,
+            widget: widgets.multipleSelect()
+        })
+    })
+}
+
 module.exports = { createPuzzleForm, 
                 bootstrapField, 
                 createRegistrationForm, 
                 createLoginForm, 
                 createUpdateOrderForm, 
-                createSearchOrderForm };
+                createSearchOrderForm,
+                createSearchListingForm };
