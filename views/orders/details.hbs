@@ -1,44 +1,46 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Order Details ID</th>
-            <th>Created Date Time </th>
-            <th>Order ID</th>
-            <th>Puzzle ID</th>
-            <th>Quantity</th>
-            <th>Individual Item Cost</th>
-        </tr>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order Details ID</th>
+                <th>Created Date Time </th>
+                <th>Order ID</th>
+                <th>Puzzle ID</th>
+                <th>Quantity</th>
+                <th>Individual Item Cost</th>
+            </tr>
 
-    </thead>
-    <tbody>
-        {{#each orderDetails}}
-        <tr>
-            <td>
-                {{this.id}}
-            </td>
-            <td>
-                {{this.create_datetime}}
-            </td>
-            </td>
-            <td>
-                {{this.order_id}}
-            </td>
-            <td>
-                {{this.puzzle_id}}
-            </td>
-            <td>
-                {{this.quantity}}
-            </td>
-            <td>
-                {{this.individual_cost}}
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each orderDetails}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    {{this.create_datetime}}
+                </td>
+                </td>
+                <td>
+                    {{this.order_id}}
+                </td>
+                <td>
+                    {{this.puzzle_id}}
+                </td>
+                <td>
+                    {{this.quantity}}
+                </td>
+                <td>
+                    {{this.individual_cost}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 {{/block}}
 
 {{/extends}}

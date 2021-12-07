@@ -1,79 +1,81 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Edit</th>
-            <th>Delete</th>
-            <th>Add to Cart</th>
-            <th>Title</th>
-            <th>Cost(Cents)</th>
-            <th>Stock</th>
-            <th>Size (Pieces)</th>
-            <th>Age Group</th>
-            <th>Difficulty Level</th>
-            <th>Material</th>
-            <th>Tags</th>
-            <th>Frames</th>
-        </tr>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Add to Cart</th>
+                <th>Title</th>
+                <th>Cost(Cents)</th>
+                <th>Stock</th>
+                <th>Size (Pieces)</th>
+                <th>Age Group</th>
+                <th>Difficulty Level</th>
+                <th>Material</th>
+                <th>Tags</th>
+                <th>Frames</th>
+            </tr>
 
-    </thead>
-    <tbody>
-        {{#each listings}}
-        <tr>
-            <td>
-                {{this.id}}
-            </td>
-            <td>
-                <a href="/listings/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
-            </td>
-            <td>
-                <a href="/listings/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-            <td>
-                <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to Cart</a>
-            </td>
-            <td>
-                {{this.title}}
-            </td>
-            <td>
-                {{this.cost}}
-            </td>
-            <td>
-                {{this.stock}}
-            </td>
-            <td>
-                {{this.Size.pieces}}
-            </td>
-            <td>
-                {{this.AgeGroup.name}}
-            </td>
-            <td>
-                {{this.DifficultyLevel.name}}
-            </td>
-            <td>
-                {{this.Material.type}}
-            </td>
-            <td>
-                {{#each this.Tag}}
-                <span class="badge bg-secondary">
-                    {{this.name}}
-                </span>
-                {{/each}}
-            </td>
-            <td>
-                {{#each this.Frame}}
-                <span class="badge bg-secondary">
-                    {{this.material}}
-                </span>
-                {{/each}}
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each listings}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    <a href="/listings/{{this.id}}/update" class="btn btn-primary btn-sm">Update</a>
+                </td>
+                <td>
+                    <a href="/listings/{{this.id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+                <td>
+                    <a href="/cart/{{this.id}}/add" class="btn btn-success btn-sm">Add to Cart</a>
+                </td>
+                <td>
+                    {{this.title}}
+                </td>
+                <td>
+                    {{this.cost}}
+                </td>
+                <td>
+                    {{this.stock}}
+                </td>
+                <td>
+                    {{this.Size.pieces}}
+                </td>
+                <td>
+                    {{this.AgeGroup.name}}
+                </td>
+                <td>
+                    {{this.DifficultyLevel.name}}
+                </td>
+                <td>
+                    {{this.Material.type}}
+                </td>
+                <td>
+                    {{#each this.Tag}}
+                    <span class="badge bg-secondary">
+                        {{this.name}}
+                    </span>
+                    {{/each}}
+                </td>
+                <td>
+                    {{#each this.Frame}}
+                    <span class="badge bg-secondary">
+                        {{this.material}}
+                    </span>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 {{/block}}
 
 {{/extends}}

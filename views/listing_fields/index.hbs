@@ -1,26 +1,29 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Listing Fields</th>
-            <th>View All </th>
-            <th>Create New </th>
-        </tr>
+<div class="table-responsive">
 
-    </thead>
-    <tbody>
-        {{#each fields}}
-        <tr>
-            <td> {{this}} </td>
-            <td> <a href="/listing_fields/{{this}}">View All Themes</a> </td>
-            </td>
-            <td> <a href="/listing_fields/{{this}}/create">Add New</a></td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Listing Fields</th>
+                <th>View All </th>
+                <th>Create New </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {{#each fields}}
+            <tr>
+                <td> {{this}} </td>
+                <td> <a href="/listing_fields/{{this}}">View All Themes</a> </td>
+                </td>
+                <td> <a href="/listing_fields/{{this}}/create">Add New</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 {{/block}}
 
 {{/extends}}

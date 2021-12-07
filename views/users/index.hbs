@@ -4,36 +4,36 @@
 
 <h1>Users</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role Type</th>
-        </tr>
-
-    </thead>
-    <tbody>
-        {{#each users}}
-        <tr>
-            <td>
-                {{this.id}}
-            </td>
-            <td>
-                {{this.username}}
-            </td>
-            <td>
-                {{this.email}}
-            </td>
-            <td>
-                {{this.role_type}}
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    {{this.username}}
+                </td>
+                <td>
+                    {{this.email}}
+                </td>
+                <td>
+                    {{this.role_type}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 
 {{/block}}
 

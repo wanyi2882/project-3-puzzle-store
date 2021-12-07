@@ -1,59 +1,61 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>User ID</th>
-            <th>Created On</th>
-            <th>Last Updated</th>
-            <th>Shipping Address</th>
-            <th>Total Amount Received</th>
-            <th>Status</th>
-            <th>View Order Details</th>
-            <th>Update Order</th>
-            <th>Delete Order</th>
-        </tr>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User ID</th>
+                <th>Created On</th>
+                <th>Last Updated</th>
+                <th>Shipping Address</th>
+                <th>Total Amount Received</th>
+                <th>Status</th>
+                <th>View Order Details</th>
+                <th>Update Order</th>
+                <th>Delete Order</th>
+            </tr>
 
-    </thead>
-    <tbody>
-        {{#each allOrders}}
-        <tr>
-            <td>
-                {{this.id}}
-            </td>
-            <td>
-                {{this.user_id}}
-            </td>
-            <td>
-                {{this.create_datetime}}
-            </td>
-            <td>
-                {{this.update_datetime}}
-            </td>
-            <td>
-                {{this.shipping_address}}
-            </td>
-            <td>
-                {{this.total_cost}}
-            </td>
-            <td>
-                {{this.OrderStatus.status}}
-            </td>
-            <td>
-                <a href="/orders/{{this.id}}/details">Order Details</a>
-            </td>
-            <td>
-                <a href="/orders/{{this.id}}/update">Update</a>
-            </td>
-            <td>
-                <a href="/orders/{{this.id}}/delete">Delete</a>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each allOrders}}
+            <tr>
+                <td>
+                    {{this.id}}
+                </td>
+                <td>
+                    {{this.user_id}}
+                </td>
+                <td>
+                    {{this.create_datetime}}
+                </td>
+                <td>
+                    {{this.update_datetime}}
+                </td>
+                <td>
+                    {{this.shipping_address}}
+                </td>
+                <td>
+                    {{this.total_cost}}
+                </td>
+                <td>
+                    {{this.OrderStatus.status}}
+                </td>
+                <td>
+                    <a href="/orders/{{this.id}}/details">Order Details</a>
+                </td>
+                <td>
+                    <a href="/orders/{{this.id}}/update">Update</a>
+                </td>
+                <td>
+                    <a href="/orders/{{this.id}}/delete">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
 {{/block}}
 
 {{/extends}}
