@@ -12,8 +12,7 @@ router.get('/', async (req, res) => {
 
     try {
 
-        let title = req.query.title;
-        let description = req.query.description;
+        let keyword = req.query.keyword;
         let min_cost = req.query.min_cost;
         let max_cost = req.query.max_cost;
         let size = req.query.size;
@@ -30,14 +29,11 @@ router.get('/', async (req, res) => {
         // we have to execute it by calling fetch on the query
         let query = Puzzle.collection();
 
-        // Find by Title
-        if (title) {
-            query.where('title', 'like', `%${title}%`);
-        }
-
-        // Find by description
-        if (description) {
-            query.where('description', 'like', `%${description}%`)
+        // Find by Title or Description
+        if (keyword) {
+            query
+            .where(keyword => keyword.where('title', 'like', `%${keyword}%`)
+            .orWhere('description', 'like', `%${keyword}%`))
         }
 
         // Find by min and/or max cost
