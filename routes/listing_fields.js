@@ -9,7 +9,7 @@ const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
 // Display all Listing Fields
 router.get('/', [checkIfAuthenticatedAdminAndManager], async function (req, res) {
-    let field = ["theme", "age group"]
+    let field = ["theme"]
 
     res.render('listing_fields/index', {
         fields: field
