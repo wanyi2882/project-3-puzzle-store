@@ -127,6 +127,6 @@ main();
 
 // Testing port: 3000
 // Deployed poert: process.env.PORT
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });
