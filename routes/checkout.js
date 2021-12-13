@@ -106,6 +106,7 @@ router.post('/process_payment', express.raw({ type: 'application/json' }), async
 
             let order_id = await orderDataLayer.createOrder(shippingAddress, statusId, createDateTime, updateDateTime, totalCost, userId)
 
+            console.log(order_id)
             // Create order details
             await metadata.map(async eachOrderDetail => {
                 let individualCost = eachOrderDetail.price
