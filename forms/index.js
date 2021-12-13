@@ -29,7 +29,7 @@ var bootstrapField = function (name, object) {
 };
 
 // Create a puzzle form 
-const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, materials, tags, frames) => {
+const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, materials, tags) => {
     return forms.create({
         'title': fields.string({
             required: true,
@@ -145,15 +145,6 @@ const createPuzzleForm = (themes, sizes, age_groups, difficulty_levels, material
             },
             widget: widgets.multipleSelect(),
             choices: tags
-        }),
-        'frames': fields.string({
-            required: true,
-            errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
-            widget: widgets.multipleSelect(),
-            choices: frames
         }),
         'image': fields.string({
             cssClasses: {

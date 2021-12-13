@@ -126,7 +126,7 @@ app.use('/api/orders', express.json(), api.orders)
 main();
 
 // Testing port: 3000
-// Deployed poert: process.env.PORT
+// Deployed port: process.env.PORT
 app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });

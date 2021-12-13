@@ -19,9 +19,6 @@ const Puzzle = bookshelf.model('Puzzle', {
     },
     Tag() {
         return this.belongsToMany('Tag')
-    },
-    Frame() {
-        return this.belongsToMany('Frame')
     }
 });
 
@@ -67,13 +64,6 @@ const Tag = bookshelf.model('Tag', {
     }
 })
 
-const Frame = bookshelf.model('Frame', {
-    tableName: 'frames',
-    Puzzles() {
-        return this.belongsToMany('Puzzle')
-    }
-})
-
 const User = bookshelf.model('User',{
     tableName: 'users'
 })
@@ -113,4 +103,4 @@ const OrderDetail = bookshelf.model('OrderDetail', {
     }
 })
 
-module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame, User, CartDetail, BlacklistedToken, Order, OrderStatus, OrderDetail };
+module.exports = { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, User, CartDetail, BlacklistedToken, Order, OrderStatus, OrderDetail };

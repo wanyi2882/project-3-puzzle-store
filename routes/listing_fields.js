@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 
 // Import in the Puzzle model
-const { Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
+const { Theme, Size, AgeGroup, DifficultyLevel, Material, Tag } = require('../models')
 
 // Import Middleware
 const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');

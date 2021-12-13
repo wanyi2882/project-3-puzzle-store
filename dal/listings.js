@@ -1,4 +1,4 @@
-const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
+const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag } = require('../models')
 
 // Get all Themes
 async function getThemes() {
@@ -30,15 +30,10 @@ async function getTags() {
     return Tag.fetchAll().map(tag => [tag.get('id'), tag.get('name')]);
 }
 
-// Get All Frames
-async function getFrames() {
-    return Frame.fetchAll().map(frame => [frame.get('id'), frame.get('material')])
-}
-
 // Get All Puzzles
 async function getAllPuzzles() {
     return await Puzzle.collection().fetch({
-        withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
+        withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag']
     })
 }
 
@@ -55,5 +50,5 @@ async function getPuzzleByID(puzzleId) {
 }
 
 
-module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames, getAllPuzzles,
+module.exports = { getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getAllPuzzles,
                 getPuzzleIDandTitle, getPuzzleByID }

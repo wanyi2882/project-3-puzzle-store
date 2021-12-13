@@ -5,10 +5,10 @@ const router = express.Router();
 const { checkIfAuthenticatedAdminAndManager } = require('../middlewares');
 
 // Import in the Puzzle model
-const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag, Frame } = require('../models')
+const { Puzzle, Theme, Size, AgeGroup, DifficultyLevel, Material, Tag } = require('../models')
 
 // Import in Listing DAL
-const { getAllPuzzles, getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags, getFrames } = require('../dal/listings')
+const { getAllPuzzles, getThemes, getSizes, getAgeGroups, getDifficultyLevels, getMaterials, getTags } = require('../dal/listings')
 
 // Import in Order DAL
 const { getOrderByPuzzleId } = require('../dal/order')
@@ -79,7 +79,7 @@ router.get('/', [checkIfAuthenticatedAdminAndManager], async (req, res) => {
             }
             // execute the query
             let listings = await query.fetch({
-                withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
+                withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag']
             });
 
             res.render('listings/index', {
@@ -106,9 +106,8 @@ router.get('/create', [checkIfAuthenticatedAdminAndManager], async (req, res) =>
     const difficulty_levels = await getDifficultyLevels()
     const materials = await getMaterials()
     const tags = await getTags()
-    const frames = await getFrames()
 
-    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags, frames);
+    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags);
 
     res.render('listings/create', {
         'form': puzzleForm.toHTML(bootstrapField),
@@ -126,14 +125,13 @@ router.post('/create', [checkIfAuthenticatedAdminAndManager], async (req, res) =
     const difficulty_levels = await getDifficultyLevels()
     const materials = await getMaterials()
     const tags = await getTags()
-    const frames = await getFrames()
 
-    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags, frames);
+    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags);
 
     puzzleForm.handle(req, {
         'success': async (form) => {
-            // Seperate out tags and frames
-            let { tags, frames, ...puzzleData } = form.data
+            // Seperate out tags
+            let { tags, ...puzzleData } = form.data
 
             // Save data into a new puzzle instance
             const puzzle = new Puzzle(puzzleData)
@@ -142,10 +140,6 @@ router.post('/create', [checkIfAuthenticatedAdminAndManager], async (req, res) =
             // Save many to many relationships
             if (tags) {
                 await puzzle.Tag().attach(tags.split(","));
-            }
-
-            if (frames) {
-                await puzzle.Frame().attach(frames.split(","));
             }
 
             // Success Flash Message
@@ -172,7 +166,7 @@ router.get('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async (
         id: req.params.listing_id
     }).fetch({
         require: true,
-        withRelated: ['Tag', 'Frame']
+        withRelated: ['Tag']
     })
 
     // Fetch all the tables related to Puzzle
@@ -182,9 +176,8 @@ router.get('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async (
     const difficulty_levels = await getDifficultyLevels()
     const materials = await getMaterials()
     const tags = await getTags()
-    const frames = await getFrames()
 
-    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags, frames);
+    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags);
 
     // Fill in the existing values
     puzzleForm.fields.title.value = listing.get('title')
@@ -205,9 +198,6 @@ router.get('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async (
     let selectedTags = await listing.related('Tag').pluck('id');
     puzzleForm.fields.tags.value = selectedTags;
 
-    let selectedFrames = await listing.related('Frame').pluck('id');
-    puzzleForm.fields.frames.value = selectedFrames;
-
     res.render('listings/update', {
         'form': puzzleForm.toHTML(bootstrapField),
         'listing': listing.toJSON(),
@@ -226,7 +216,7 @@ router.post('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async 
         id: req.params.listing_id
     }).fetch({
         require: true,
-        withRelated: ['Tag', 'Frame']
+        withRelated: ['Tag']
     })
 
     // Fetch all the tables related to Puzzle
@@ -236,15 +226,14 @@ router.post('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async 
     const difficulty_levels = await getDifficultyLevels()
     const materials = await getMaterials()
     const tags = await getTags()
-    const frames = await getFrames()
 
     // Process the Form
-    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags, frames);
+    const puzzleForm = createPuzzleForm(themes, sizes, age_groups, difficulty_levels, materials, tags);
     puzzleForm.handle(req, {
         'success': async (form) => {
 
-            // Seperate out tags and frames
-            let { tags, frames, ...puzzleData } = form.data;
+            // Seperate out tags
+            let { tags, ...puzzleData } = form.data;
             listing.set(puzzleData);
             listing.save();
 
@@ -258,17 +247,6 @@ router.post('/:listing_id/update', [checkIfAuthenticatedAdminAndManager], async 
 
             // Add in all the tags selected in the form
             await listing.Tag().attach(tagIds);
-
-            // Update Frames
-            let frameIds = frames.split(",")
-            let existingFrameIds = await listing.related("Frame").pluck('id');
-
-            // Remove all the frames that are not selected anymore
-            let framesToRemove = existingFrameIds.filter(id => frameIds.includes(id) == false);
-            await listing.Frame().detach(framesToRemove)
-
-            // Add in all the frames selected in the form
-            await listing.Frame().attach(frameIds)
 
             // Success Flash Message
             req.flash("success_messages", `Puzzle ${listing.get('title')} has been updated`)

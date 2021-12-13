@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
         }
 
         let listings = await query.fetch({
-            withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag', 'Frame']
+            withRelated: ['Theme', 'Size', 'AgeGroup', 'DifficultyLevel', 'Material', 'Tag']
         })
 
         res.status(200);
